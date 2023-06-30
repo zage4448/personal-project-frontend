@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  nginx:
+    image: "nginx:latest"
+    container_name: personal-frontend-deploy-server
+    restart: unless-stopped
+    volumes:
+      - /home/ec2-user/travelers-guide/frontend-server/conf:/etc/nginx/conf.d
+      - /home/ec2-user/travelers-guide/frontend-server/html:/usr/share/nginx/html
+    ports:
+      - "80:80"
+    networks:
+      - app
+
+networks:
+  app:
+    driver: bridge
