@@ -11,7 +11,7 @@
                 A Perfect Trip
             </span>
           </v-toolbar-title>
-        <v-btn elevation="0" class="nav-button">
+        <v-btn elevation="0" class="nav-button" @click="toHome">
           <span>Home</span>
         </v-btn>
         <v-btn elevation="0" class="nav-button">
@@ -23,7 +23,7 @@
         <v-btn elevation="0" style="margin-right:8rem; text-transform:none;">
           <span>Guide</span>
         </v-btn>
-        <v-btn v-if="!userToken" elevation="0" class="account-button">
+        <v-btn v-if="!userToken" elevation="0" class="account-button" @click="toLoginPage">
             <v-icon>mdi-account</v-icon>
           <span>Login</span>
         </v-btn>
@@ -47,6 +47,17 @@ export default {
     userToken: localStorage.getItem("userToken")
     };
   },
+  methods: {
+    toLoginPage() {
+      this.$router.push({name: 'LoginPage'})
+    },
+    toHome() {
+      this.$router.push({name:'home'})
+      .catch(
+        location.reload()
+      )
+    }
+  }
 
 };
 </script>
