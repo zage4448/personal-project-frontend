@@ -27,7 +27,7 @@
             <v-icon>mdi-account</v-icon>
           <span>Login</span>
         </v-btn>
-        <v-btn v-if="userToken" elevation="0" class="account-button">
+        <v-btn v-if="userToken" elevation="0" class="account-button" @click="logout">
             <v-icon>mdi-account</v-icon>
           <span>Logout</span>
         </v-btn>
@@ -40,6 +40,11 @@
   </template>
   
 <script>
+import { mapActions } from 'vuex';
+
+const accountModule = 'accountModule'
+
+
 export default {
   data() {
     return {
@@ -48,6 +53,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(accountModule, ['requestLogoutToSpring']),
     toLoginPage() {
       this.$router.push({name: 'LoginPage'})
     },
@@ -56,7 +62,16 @@ export default {
       .catch(
         location.reload()
       )
-    }
+    },
+    async logout () {
+      await this.requestLogoutToSpring(this.userToken)
+      localStorage.removeItem('userToken')
+      await this.$router.push({name: 'home'})
+        .catch( 
+          location.reload()
+        )
+    },
+
   }
 
 };

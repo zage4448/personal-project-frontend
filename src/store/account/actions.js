@@ -67,5 +67,15 @@ export default {
       .catch((res) => {
         alert("문제 발생!")
       })
+  },
+  requestLogoutToSpring ({}, userToken) {
+    return axiosInst.springAxiosInst.post('/account/logout', {userToken})
+      .then((res) => {
+        alert("로그아웃 하셨습니다")
+      })
+      .catch((res) => {
+        alert('로그아웃 실패')
+      })
+      
   }
 }
