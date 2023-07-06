@@ -23,9 +23,10 @@ export default {
     ...mapActions(accountModule, ["requestLoginToSpring"]),
 
     async login(payload) {
-      await this.requestLoginToSpring(payload);
-      await this.$router.push({name: 'home'})
-      location.reload();
+      if (await this.requestLoginToSpring(payload)) {
+        this.$router.push({name: 'home'})
+        location.reload();
+      }
     }
   },
   mounted() {

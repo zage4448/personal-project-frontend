@@ -6,12 +6,14 @@ export default {
     return axiosInst.springAxiosInst
       .post("/account/login", { email, password })
       .then((res) => {
-        if (res.data != null) {
+        if (res.data.userToken != null) {
           alert("로그인 성공!");
-          let userToken = res.data;
+          let userToken = res.data.userToken;
           localStorage.setItem("userToken", userToken);
+          return true
         } else {
           alert("로그인 실패!");
+          return false
         }
     });
   },
