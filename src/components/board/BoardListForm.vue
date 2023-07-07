@@ -3,21 +3,21 @@
     <div style="text-align: right;">
       <v-btn class="register-button">Create New Post</v-btn>
     </div>
-    <div v-if="!boards">
+    <div v-if="!boards || (Array.isArray(boards) && boards.length === 0)">
       <v-data-table
         class="category-table"
         :headers="headers"
         :items="categories"
         hide-default-header
         hide-default-footer
-        item-key="continent"
-        item-value="continent"
+        item-key="boardCategory"
+        item-value="boardCategory"
         @click:row="readCategory"
         >
-        <template v-slot:item.continent="{ item }">
+        <template v-slot:item.boardCategory="{ item }">
           <div>
-            <div>{{ item.continent }}</div>
-            <div class="small-text">{{ getDescription(item.continent) }}</div>
+            <div>{{ item.boardCategory }}</div>
+            <div class="small-text">{{ getDescription(item.boardCategory) }}</div>
           </div>
         </template>
         <template v-slot:item.posts="{ item }">
@@ -36,8 +36,7 @@
       </v-data-table>
       <v-pagination
         v-model="pagination.page"
-        :length="Math.ceil(boards.length / perPage)"
-        @input="updateItems"/>
+        :length="Math.ceil(boards.length / perPage)"/>
     </div>
   </v-container>
 </template>
@@ -54,7 +53,7 @@ export default {
         {
           text: 'Continents',
           align: 'start',
-          value: 'continent',
+          value: 'boardCategory',
           class: "*"
         },
         { 
@@ -92,7 +91,7 @@ export default {
     }
   },
   computed: {
-    // ...mapState(boardModule, ['boards', 'categories']),
+    ...mapState(boardModule, ['categories', 'boards']),
     pagedItems () {
       const startIdx = (this.pagination.page - 1) * this.perPage
       const endIdx = startIdx + this.perPage
@@ -104,15 +103,14 @@ export default {
   },
   methods: {
     ...mapActions(boardModule, ['requestCategoriesToSpring', 'requestBoardListByCategoryToSpring']),
-    getDescription(continent) {
-      if (continent === 'Europe') {
+    getDescription(boardCategory) {
+      if (boardCategory === 'Europe') {
         return 'Tips on Traveling Europian Countries'
       }
-      return 'Tips on Traveling ' + continent + 'n Countries'
+      return 'Tips on Traveling ' + boardCategory + 'n Countries'
     },
     async readCategory(event, { item }) {
-      const selectedRowCategory = item.continent
-      localStorage.removeItem('boardListNav')
+      const selectedRowCategory = item.boardCategory
       await this.requestBoardListByCategoryToSpring(selectedRowCategory)
     }
   }
