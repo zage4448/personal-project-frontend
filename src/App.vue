@@ -30,5 +30,6 @@ font-weight: 400;
 }
 .background{
   background-color: #f5f5f5;
+  overflow: auto;
 }
 </style>
