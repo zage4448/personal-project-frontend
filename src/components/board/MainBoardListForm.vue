@@ -4,7 +4,7 @@
       <div class="toolbar_buttons">
         <button v-for="button in buttons" :key="button.label" class="board_button"
           :disabled="button.isDisabled" :style="{ color: button.textColor}" 
-          @click="disableButton(button.label)">
+          @click="toggleButton(button.label)">
           {{ button.label }}
         </button>
       </div>
@@ -16,13 +16,17 @@
       </div>
     </v-app-bar>
     <div class="board-list-form">
-      <BoardListForm/>
+      <BoardListForm @boardClick="isThereBoards"/>
     </div>
   </div>
 </template>
   
 <script>
 import BoardListForm from "@/components/board/BoardListForm.vue"
+import { mapActions } from "vuex";
+import { mapState } from "vuex";
+
+const boardModule = 'boardModule'
 
 export default {
   components: {
@@ -37,15 +41,51 @@ export default {
       ]
     };
   },
+  computed: {
+    ...mapState(boardModule, ['boards']),
+  },
   methods: {
-    disableButton(label) {
-      this.buttons = this.buttons.map(button => {
-        if (button.label === label) {
-          return { ...button, isDisabled: true, textColor: "#CCCCCC" };
-        } else {
-          return { ...button, isDisabled: false, textColor: "white" };
+    ...mapActions(boardModule, ['clearBoards']),
+    toggleButton(label) {
+      if (label === "Places") {
+        this.buttons = [
+          { label: "Places", isDisabled: true, textColor: "#CCCCCC"},
+          { label: "Interests", isDisabled: false, textColor: "white"},
+          { label: "New Posts", isDisabled: false, textColor: "white"}
+        ]
+        this.clearBoards()
+      }
+      if (label === "Interests") {
+        this.buttons = [
+          { label: "Places", isDisabled: false, textColor: "white"},
+          { label: "Interests", isDisabled: false, textColor: "#CCCCCC"},
+          { label: "New Posts", isDisabled: false, textColor: "white"}
+        ]
+      }
+      if (label === "New Posts") {
+        this.buttons = [
+          { label: "Places", isDisabled: false, textColor: "white"},
+          { label: "Interests", isDisabled: false, textColor: "white"},
+          { label: "New Posts", isDisabled: false, textColor: "#CCCCCC"}
+        ]
+      }
+    },
+    isThereBoards () {
+      if (this.boards.length !== 0) {
+        this.buttons = this.buttons.map(button => {
+          return { ...button, isDisabled: false, textColor: "white"}
+        })
+      }
+    }
+  },
+  watch: {
+    boards: {
+      immediate: true,
+      handler(newValue, oldValue) {
+        if (newValue !== oldValue) {
+          this.isThereBoards()
         }
-      });
+      }
     }
   }
 };

@@ -32,7 +32,8 @@
         :headers="boardHeaders"
         :items="pagedItems"
         :pagination.sync="pagination"
-        item-key="boardId">
+        item-key="boardId"
+        item-value="boardId">
       </v-data-table>
       <v-pagination
         v-model="pagination.page"
@@ -64,7 +65,7 @@ export default {
           class: 'text-center',
           width: '100px',
         }
-      ],
+      ], 
       // categories: [
       //   {continent: 'Asia', posts: 56}, 
       //   {continent: 'Europe', posts: 41}, 
@@ -75,14 +76,13 @@ export default {
       // ],
       boardHeaders: [
         {
-          title: 'No',
           align: 'start',
           sortable: true,
-          key: 'boardId'
+          value: 'boardId'
         },
-        { title: '제목', align: 'end', key: 'title' },
-        { title: '작성자', align: 'end', key: 'writer' },
-        { title: '작성일자', align: 'end', key: 'createDate' }
+        { text: '제목', align: 'center', value: 'title' },
+        { text: '작성자', align: 'end', value: 'writer' },
+        { text: '작성일자', align: 'end', value: 'createDate' }
       ],
       perPage: 5,
       pagination: {
@@ -112,7 +112,8 @@ export default {
     async readCategory(event, { item }) {
       const selectedRowCategory = item.boardCategory
       await this.requestBoardListByCategoryToSpring(selectedRowCategory)
-    }
+    },
+
   }
     
 }
