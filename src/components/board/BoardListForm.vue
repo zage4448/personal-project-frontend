@@ -34,7 +34,13 @@
         :pagination.sync="pagination"
         item-key="boardId"
         item-value="boardId">
+        <template v-slot:item.createDate="{ item }">
+          <div>
+            <div>{{ new Date(item.createDate).toLocaleDateString('en-US') }}</div>
+          </div>
+        </template>
       </v-data-table>
+
       <v-pagination
         v-model="pagination.page"
         :length="Math.ceil(boards.length / perPage)"/>
