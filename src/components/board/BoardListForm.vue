@@ -33,7 +33,8 @@
         :items="pagedItems"
         :pagination.sync="pagination"
         item-key="boardId"
-        item-value="boardId">
+        item-value="boardId"
+        @click:row="readBoard">
         <template v-slot:item.createDate="{ item }">
           <div>
             <div>{{ new Date(item.createDate).toLocaleDateString('en-US') }}</div>
@@ -119,6 +120,13 @@ export default {
       const selectedRowCategory = item.boardCategory
       await this.requestBoardListByCategoryToSpring(selectedRowCategory)
     },
+    readBoard(event, { item }) {
+      const boardId = item.boardId
+      this.$router.push({
+        name: 'BoardReadPage',
+        params: {boardId: boardId.toString()}
+      })
+    }
 
   }
     
