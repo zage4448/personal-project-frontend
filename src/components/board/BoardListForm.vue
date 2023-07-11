@@ -1,7 +1,7 @@
 <template lang="">
   <v-container class="table-container">
     <div style="text-align: right;">
-      <v-btn class="register-button">Create New Post</v-btn>
+      <v-btn class="register-button" @click="registerBoard">Create New Post</v-btn>
     </div>
     <div v-if="!boards || (Array.isArray(boards) && boards.length === 0)">
       <v-data-table
@@ -126,6 +126,13 @@ export default {
         name: 'BoardReadPage',
         params: {boardId: boardId.toString()}
       })
+    },
+    registerBoard() {
+      if (localStorage.getItem("userToken") == null) {
+        alert("로그인 후 이용할 수 있습니다")
+      } else {
+        this.$router.push({name: 'BoardRegisterPage'})
+      }
     }
 
   }

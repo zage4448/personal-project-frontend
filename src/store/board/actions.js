@@ -28,5 +28,14 @@ export default {
       .then((res) => {
         commit(REQUEST_BOARD_TO_SPRING, res.data)
       })
+  },
+  requestRegisterBoardToSpring({}, payload) {
+    const { userToken, title, content, category } = payload
+    console.log(category)
+    return axiosInst.springAxiosInst.post('board/register', { userToken, title, content, category })
+    .then((res) => {
+      alert('게시글 등록 성공')
+      return res.data
+    })
   }
 }
