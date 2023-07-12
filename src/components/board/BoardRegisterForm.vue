@@ -8,7 +8,9 @@
           color="primary accent-4"
           @click="reveal = !reveal"
         >
-          Category
+          Category 
+          <v-icon v-if="reveal == false">mdi-menu-down</v-icon>
+          <v-icon v-if="reveal == true">mdi-menu-up</v-icon>
         </v-btn>
         <v-card-text>{{ category }}</v-card-text>
       </v-card-actions>
