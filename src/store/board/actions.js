@@ -40,7 +40,7 @@ export default {
     })
   },
   requestSearchBoardsToSpring({ commit }, searchKeyword) {
-    return axiosInst.springAxiosInst.get(`board/list/${searchKeyword}`)
+    return axiosInst.springAxiosInst.get(`board/list/search/${searchKeyword}`)
       .then((res) => {
         commit(REQUEST_SEARCH_BOARD_TO_SPRING, res.data)
       })
