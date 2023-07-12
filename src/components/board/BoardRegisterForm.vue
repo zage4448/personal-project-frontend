@@ -42,7 +42,8 @@
                 v-model="content"
                 clearable
                 rows="6"
-                row-height="20">
+                row-height="20"
+                required>
     </v-textarea>
     <div style="text-align: end; padding-right: 20px;">
       <v-btn type="submit">작성하기</v-btn>
@@ -80,15 +81,26 @@ export default {
   },
   methods: {
     register() {
-      const { userToken, title, content, category } = this
-      console.log("category: " + category)
-      this.$emit('submit', { userToken, title, content, category })
+      if (!this.title) {
+        alert("제목을 작성하세요")
+      }
+      else if (!this.content) {
+        alert("본문이 없습니다")
+      }
+      else if (!this.category) {
+        alert("카테고리를 정하세요")
+      }
+      else {
+        const { userToken, title, content, category } = this
+        const convertedContent = content.replace(/\n/g, '<br>');
+        this.$emit('submit', { userToken, title, content: convertedContent, category })
+      }
     },
     closeCategory() {
       this.reveal = false
       console.log(this.category)
     }
-  }
+  },
     
 }
 
