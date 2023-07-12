@@ -35,8 +35,7 @@
                 수정일자: {{ new Date(board.updateDate).toLocaleDateString('en-US') }}
               </div>
             </div>
-            <div class="board_content">
-              {{ board.content }}
+            <div class="board_content" v-html="board.content">
             </div>
             <div class="board_like">
               <button><v-icon>mdi-thumb-up-outline</v-icon> Like</button>
@@ -95,7 +94,7 @@ export default {
     else if (this.board.boardCategory == "Australia") {
       this.backgroundImage = require("@/assets/images/australia_banner.jpg")
     }
-  }
+  },
 }
 </script>
 
