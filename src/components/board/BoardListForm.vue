@@ -1,7 +1,9 @@
 <template lang="">
   <v-container class="table-container">
-    <div style="text-align: right;">
-      <v-btn class="register-button" @click="registerBoard">Create New Post</v-btn>
+    <div>
+      <div style="text-align: right;">
+        <v-btn class="register-button" @click="registerBoard">Create New Post</v-btn>
+      </div>
     </div>
     <div v-if="!boards || (Array.isArray(boards) && boards.length === 0)">
       <v-data-table
@@ -29,12 +31,22 @@
     </div>
     <div v-else>
       <v-data-table
+        class="list-table"
         :headers="boardHeaders"
         :items="pagedItems"
         :pagination.sync="pagination"
         item-key="boardId"
         item-value="boardId"
         @click:row="readBoard">
+        <template v-slot:item.title="{ item }">
+          <div class="board_title_template" v-if="!item.content">
+            <div style="font-size: 18px">{{ item.title }}</div>
+          </div>
+          <div class="board_title_template" v-else>
+            <div style="font-size: 21px">{{ item.title }}</div>
+            <div class="small-text">{{ item.content }}</div>
+          </div>
+        </template>
         <template v-slot:item.createDate="{ item }">
           <div>
             <div>{{ new Date(item.createDate).toLocaleDateString('en-US') }}</div>
@@ -83,12 +95,12 @@ export default {
       // ],
       boardHeaders: [
         {
-          align: 'start',
-          sortable: true,
-          value: 'boardId'
+          align: 'center',
+          text: '제목',
+          value: 'title'
         },
-        { text: '제목', align: 'center', value: 'title' },
-        { text: '작성자', align: 'end', value: 'writer' },
+        // { text: '제목', align: 'left', value: 'title' },
+        { text: '작성자', align: 'end', value: 'writer', },
         { text: '작성일자', align: 'end', value: 'createDate' }
       ],
       perPage: 5,
@@ -133,13 +145,42 @@ export default {
       } else {
         this.$router.push({name: 'BoardRegisterPage'})
       }
-    }
+    },
 
   }
     
 }
 </script>
 <style>
+.table-container{
+  width: 100%;
+  padding-bottom: 30px;
+}
+
+.category-table {
+  margin-top: 24px;
+}
+.category-table td{
+  font-size: 21px !important;
+  height: 92px !important;
+}
+.small-text {
+  font-size: 12px;
+}
+
+.list-table {
+  margin-top: 24px;
+}
+.list-table td{
+  font-size: 17px !important;
+  height: 86px !important;
+}
+
+.board_title_template {
+  padding-left: 15px; 
+  text-align: left;
+}
+
 .register-button {
   background-color: rgb(75, 8, 8) !important;
   color: white !important;
@@ -148,21 +189,11 @@ export default {
   width: 200px !important;
   font-size: 13px;
   font-family: Arial, Helvetica, sans-serif;
-}    
-.category-table td{
-  font-size: 21px !important;
-  height: 92px !important;
-}
-.table-container{
-  width: 100%;
-  padding-bottom: 30px;
-}
-.category-table {
-  margin-top: 24px;
-}
-.small-text {
-  font-size: 12px;
-}
+}   
+
+
+
+
 
 
 </style>

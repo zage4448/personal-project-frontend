@@ -9,8 +9,8 @@
         </button>
       </div>
       <div class="toolbar_search">
-        <input type="text" placeholder="  Search" class="search_input"/>
-          <button>
+        <input type="text" placeholder="  Search" class="search_input" v-model="searchKeyword"/>
+          <button @click="search">
             <v-icon style="color: white; font-size:40px">mdi-magnify</v-icon>
           </button>
       </div>
@@ -38,14 +38,15 @@ export default {
         { label: "Places", isDisabled: true, textColor: "#CCCCCC"},
         { label: "Interests", isDisabled: false, textColor: "white"},
         { label: "New Posts", isDisabled: false, textColor: "white"}
-      ]
+      ],
+      searchKeyword: '',
     };
   },
   computed: {
     ...mapState(boardModule, ['boards']),
   },
   methods: {
-    ...mapActions(boardModule, ['clearBoards']),
+    ...mapActions(boardModule, ['clearBoards', 'requestSearchBoardsToSpring']),
     toggleButton(label) {
       if (label === "Places") {
         this.buttons = [
@@ -58,7 +59,7 @@ export default {
       if (label === "Interests") {
         this.buttons = [
           { label: "Places", isDisabled: false, textColor: "white"},
-          { label: "Interests", isDisabled: false, textColor: "#CCCCCC"},
+          { label: "Interests", isDisabled: true, textColor: "#CCCCCC"},
           { label: "New Posts", isDisabled: false, textColor: "white"}
         ]
       }
@@ -66,7 +67,7 @@ export default {
         this.buttons = [
           { label: "Places", isDisabled: false, textColor: "white"},
           { label: "Interests", isDisabled: false, textColor: "white"},
-          { label: "New Posts", isDisabled: false, textColor: "#CCCCCC"}
+          { label: "New Posts", isDisabled: true, textColor: "#CCCCCC"}
         ]
       }
     },
@@ -76,6 +77,12 @@ export default {
           return { ...button, isDisabled: false, textColor: "white"}
         })
       }
+    },
+    search() {
+      if (this.searchKeyword.length >= 2 ) {
+      this.requestSearchBoardsToSpring(this.searchKeyword)
+      }
+      else { alert("두 글자 이상만 검색 가능합니다.")}
     }
   },
   watch: {
@@ -113,17 +120,11 @@ export default {
 .search_input {
   background-color: transparent;
   border-color: white;
+  color: white;
   border-style: solid;
   border-radius: 8px;
-  color: white;
   font-size: 18px;
-  margin-right: 12px;
-}
-
-.search-icon {
-  top: 50%;
-  right: 10px;
-  color: white;
+  margin-left: 12px;
 }
 
 .board-list-form {
