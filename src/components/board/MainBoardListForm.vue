@@ -9,7 +9,10 @@
         </button>
       </div>
       <div class="toolbar_search">
-        <input type="text" placeholder="  Search" class="search_input" v-model="searchKeyword"/>
+        <input type="text" placeholder="  Search" 
+          class="search_input" 
+          v-model="searchKeyword"
+          @keyup.enter="search"/>
           <button @click="search">
             <v-icon style="color: white; font-size:40px">mdi-magnify</v-icon>
           </button>
