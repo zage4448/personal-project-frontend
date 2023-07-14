@@ -44,7 +44,9 @@
           </div>
           <div class="board_title_template" v-else>
             <div style="font-size: 21px">{{ item.title }}</div>
-            <div class="small-text">{{ item.content }}</div>
+            <div class="small-text">
+              {{ item.content.substring(0, 10) + (item.content.length > 10 ? '....' : '') }}
+            </div>
           </div>
         </template>
         <template v-slot:item.createDate="{ item }">
@@ -99,7 +101,7 @@ export default {
           text: '제목',
           value: 'title'
         },
-        // { text: '제목', align: 'left', value: 'title' },
+        { align: 'left', value: 'category' },
         { text: '작성자', align: 'end', value: 'writer', },
         { text: '작성일자', align: 'end', value: 'createDate' }
       ],
