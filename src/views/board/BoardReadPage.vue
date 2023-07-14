@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <BoardReadForm :board="board" :relatedBoardList="relatedBoardList"/>
+      <BoardReadForm :board="board" :relatedBoardList="relatedBoardList" :boardId="boardId"/>
     </div>
   </div>
 </template>

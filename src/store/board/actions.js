@@ -58,5 +58,27 @@ export default {
       .then((res) => {
         commit(REQUEST_RECENT_BOARD_LIST_TO_SPRING, res.data)
       })
-  } 
+  },
+  requestIsBoardLikedToSpring({}, payload) {
+    const { boardId, userToken } = payload
+    return axiosInst.springAxiosInst.get('board/checkBoardLiked', {
+      params: {
+        boardId: boardId,
+        userToken: userToken
+      }
+    })
+      .then((res) => {
+        return res.data
+      })
+  },
+  requestLikeBoardToSpring({}, payload) {
+    const { boardId, userToken } = payload
+    return axiosInst.springAxiosInst.post('board/likeBoard', { boardId, userToken })
+      .then((res) => {})
+  },
+  requestUnlikeBoardToSpring({}, payload) {
+    const { boardId, userToken } = payload
+    return axiosInst.springAxiosInst.post('board/unLikeBoard', { boardId, userToken })
+      .then((res) => {})
+  }
 }

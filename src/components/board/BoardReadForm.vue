@@ -38,8 +38,11 @@
             </div>
             <div class="board_content" v-html="board.content">
             </div>
-            <div class="board_like">
+            <div class="board_like" v-if="!isBoardLiked" @click="likeBoard">
               <button><v-icon>mdi-thumb-up-outline</v-icon> Like</button>
+            </div>
+            <div class="board_like" v-if="isBoardLiked" @click="unlikeBoard">
+              <button><v-icon style="color: blue">mdi-thumb-up</v-icon> Like</button>
             </div>
             <v-divider class="board_divider"></v-divider>
             <div class="board_comments">
@@ -63,12 +66,18 @@
     </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
+
+const boardModule = 'boardModule'
+
 
 export default {
   data() {
     return {
       backgroundImage: '',
       comment: '',
+      userToken: localStorage.getItem('userToken'),
+      isBoardLiked: false,
     }
   },
   props: {
@@ -78,6 +87,10 @@ export default {
     },
     relatedBoardList: {
       type: Array,
+      required: true
+    },
+    boardId: {
+      type: String,
       required: true
     }
   },
@@ -100,14 +113,33 @@ export default {
     else if (this.board.boardCategory == "Australia") {
       this.backgroundImage = require("@/assets/images/australia_banner.jpg")
     }
+
+    this.checkIsBoardLiked()
   },
   methods: {
+    ...mapActions(boardModule, ['requestIsBoardLikedToSpring', 'requestLikeBoardToSpring', 'requestUnlikeBoardToSpring', 'requestReadBoardToSpring']),
+    async checkIsBoardLiked() {
+      const { boardId, userToken } = this
+      this.isBoardLiked = await this.requestIsBoardLikedToSpring({boardId, userToken})
+    },
     toRelatedBoard(boardId) {
       this.$router.push({
         name: 'BoardReadPage', 
         params: {boardId: boardId.toString()}
       })
       location.reload()
+    },
+    async likeBoard() {
+      const { boardId, userToken } = this
+      await this.requestLikeBoardToSpring({boardId, userToken})
+      this.isBoardLiked = await this.requestIsBoardLikedToSpring({boardId, userToken})
+      this.requestReadBoardToSpring(boardId)
+    },
+    async unlikeBoard() {
+      const { boardId, userToken } = this
+      await this.requestUnlikeBoardToSpring({boardId, userToken})
+      this.isBoardLiked = await this.requestIsBoardLikedToSpring({boardId, userToken})
+      this.requestReadBoardToSpring(boardId)
     }
   }
 }
