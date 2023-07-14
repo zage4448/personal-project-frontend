@@ -4,7 +4,8 @@ import {
     CLEAR_BOARDS,
     REQUEST_BOARD_TO_SPRING,
     REQUEST_SEARCH_BOARD_TO_SPRING,
-    REQUEST_RELATED_BOARD_LIST_TO_SPRING
+    REQUEST_RELATED_BOARD_LIST_TO_SPRING,
+    REQUEST_RECENT_BOARD_LIST_TO_SPRING,
   } from './mutation-types'
 
 import axiosInst from '@/utility/axiosInst'
@@ -51,5 +52,11 @@ export default {
       .then((res) => {
         commit(REQUEST_RELATED_BOARD_LIST_TO_SPRING, res.data)
       })
-  }
+  },
+  requestRecentBoardsToSpring({ commit }) {
+    return axiosInst.springAxiosInst.get('board/list/recent')
+      .then((res) => {
+        commit(REQUEST_RECENT_BOARD_LIST_TO_SPRING, res.data)
+      })
+  } 
 }

@@ -49,7 +49,7 @@ export default {
     ...mapState(boardModule, ['boards']),
   },
   methods: {
-    ...mapActions(boardModule, ['clearBoards', 'requestSearchBoardsToSpring']),
+    ...mapActions(boardModule, ['clearBoards', 'requestSearchBoardsToSpring', 'requestRecentBoardsToSpring']),
     toggleButton(label) {
       if (label === "Places") {
         this.buttons = [
@@ -58,6 +58,7 @@ export default {
           { label: "New Posts", isDisabled: false, textColor: "white"}
         ]
         this.clearBoards()
+        this.clearSearch() 
       }
       if (label === "Interests") {
         this.buttons = [
@@ -65,27 +66,58 @@ export default {
           { label: "Interests", isDisabled: true, textColor: "#CCCCCC"},
           { label: "New Posts", isDisabled: false, textColor: "white"}
         ]
+        this.clearSearch() 
       }
       if (label === "New Posts") {
         this.buttons = [
           { label: "Places", isDisabled: false, textColor: "white"},
           { label: "Interests", isDisabled: false, textColor: "white"},
           { label: "New Posts", isDisabled: true, textColor: "#CCCCCC"}
-        ]
+        ],
+        this.requestRecentBoardsToSpring()
+        this.clearSearch() 
       }
     },
     isThereBoards () {
+      const isThereSearch = this.searchKeyword.length > 1
       if (this.boards.length !== 0) {
         this.buttons = this.buttons.map(button => {
-          return { ...button, isDisabled: false, textColor: "white"}
-        })
+          if (isThereSearch) {
+            return { ...button, isDisabled: false, textColor: "white"}
+          }
+          else {
+            if (button.label === 'Places') {
+            return { ...button, isDisabled: false, textColor: "white"}
+            }
+            return button;
+          }})
       }
     },
+//     isThereBoards() {
+//   const isSearchKeywordLong = this.searchKeyword.length > 1;
+  
+//   if (isSearchKeywordLong) {
+//     this.buttons.forEach(button => {
+//       button.isDisabled = false;
+//       button.textColor = "white";
+//     });
+//   } else {
+//     const placesButton = this.buttons.find(button => button.label === "Places");
+    
+//     if (placesButton) {
+//       placesButton.isDisabled = false;
+//       placesButton.textColor = "white";
+//     }
+//   }
+// },
     search() {
       if (this.searchKeyword.length >= 2 ) {
       this.requestSearchBoardsToSpring(this.searchKeyword)
       }
       else { alert("두 글자 이상만 검색 가능합니다.")}
+    },
+    clearSearch() {
+      this.searchKeyword = ''
     }
   },
   watch: {
