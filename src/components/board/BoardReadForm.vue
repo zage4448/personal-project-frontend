@@ -23,8 +23,9 @@
             </div>
             <div class="similar_posts">
               <h4 style="line-height: 3;">Similar Posts</h4>
-              test <br>
-              test 
+              <button class="similar_posts_button" v-for="board in relatedBoardList" :key="board.boardId" @click="toRelatedBoard(board.boardId)">
+                {{ board.title }}
+              </button>
             </div>
           </div>
           <div class="board_left">
@@ -62,6 +63,7 @@
     </div>
 </template>
 <script>
+
 export default {
   data() {
     return {
@@ -72,6 +74,10 @@ export default {
   props: {
     board: {
       type: Object,
+      required: true
+    },
+    relatedBoardList: {
+      type: Array,
       required: true
     }
   },
@@ -95,6 +101,15 @@ export default {
       this.backgroundImage = require("@/assets/images/australia_banner.jpg")
     }
   },
+  methods: {
+    toRelatedBoard(boardId) {
+      this.$router.push({
+        name: 'BoardReadPage', 
+        params: {boardId: boardId.toString()}
+      })
+      location.reload()
+    }
+  }
 }
 </script>
 
@@ -211,6 +226,11 @@ export default {
   padding-bottom: 6px;
   border: black solid 1px;
   margin-top: 18px
+}
+.similar_posts_button {
+  font-size: 14px;
+  text-align: start;
+  margin-bottom: 8px;
 }
 .board_divider{
   margin-left: 18px;

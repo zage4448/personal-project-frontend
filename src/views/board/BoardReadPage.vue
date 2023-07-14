@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <BoardReadForm :board="board"/>
+      <BoardReadForm :board="board" :relatedBoardList="relatedBoardList"/>
     </div>
   </div>
 </template>
@@ -23,13 +23,14 @@ export default {
     }
   },
   computed: {
-    ...mapState(boardModule, ['board']),
+    ...mapState(boardModule, ['board', 'relatedBoardList']),
   },
   methods: {
-    ...mapActions(boardModule, ['requestReadBoardToSpring'])
+    ...mapActions(boardModule, ['requestReadBoardToSpring', 'requestRelatedBoardListToSpring'])
   },
   mounted() {
     this.requestReadBoardToSpring(this.boardId)
+    this.requestRelatedBoardListToSpring(this.boardId)
   }
 }
 
