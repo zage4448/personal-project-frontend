@@ -38,11 +38,11 @@
             </div>
             <div class="board_content" v-html="board.content">
             </div>
-            <div class="board_like" v-if="!isBoardLiked" @click="likeBoard">
-              <button><v-icon>mdi-thumb-up-outline</v-icon> Like</button>
+            <div class="board_like" v-if="!isBoardLiked" >
+              <button @click="likeBoard"><v-icon>mdi-thumb-up-outline</v-icon> Like</button>
             </div>
-            <div class="board_like" v-if="isBoardLiked" @click="unlikeBoard">
-              <button><v-icon style="color: blue">mdi-thumb-up</v-icon> Like</button>
+            <div class="board_like" v-if="isBoardLiked" >
+              <button @click="unlikeBoard"><v-icon style="color: blue">mdi-thumb-up</v-icon> Like</button>
             </div>
             <v-divider class="board_divider"></v-divider>
             <div class="board_comments">
@@ -119,8 +119,11 @@ export default {
   methods: {
     ...mapActions(boardModule, ['requestIsBoardLikedToSpring', 'requestLikeBoardToSpring', 'requestUnlikeBoardToSpring', 'requestReadBoardToSpring']),
     async checkIsBoardLiked() {
-      const { boardId, userToken } = this
-      this.isBoardLiked = await this.requestIsBoardLikedToSpring({boardId, userToken})
+      if (this.userToken) {
+        const { boardId, userToken } = this
+        this.isBoardLiked = await this.requestIsBoardLikedToSpring({boardId, userToken})
+      }
+      else return false
     },
     toRelatedBoard(boardId) {
       this.$router.push({
@@ -130,10 +133,13 @@ export default {
       location.reload()
     },
     async likeBoard() {
-      const { boardId, userToken } = this
-      await this.requestLikeBoardToSpring({boardId, userToken})
-      this.isBoardLiked = await this.requestIsBoardLikedToSpring({boardId, userToken})
-      this.requestReadBoardToSpring(boardId)
+      if (this.userToken) {
+        const { boardId, userToken } = this
+        await this.requestLikeBoardToSpring({boardId, userToken})
+        this.isBoardLiked = await this.requestIsBoardLikedToSpring({boardId, userToken})
+        this.requestReadBoardToSpring(boardId)
+      } 
+      else alert("로그인 후 이용 가능합니다")
     },
     async unlikeBoard() {
       const { boardId, userToken } = this
