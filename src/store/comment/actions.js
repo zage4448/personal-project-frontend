@@ -10,5 +10,10 @@ export default {
     .then((res) => {
       commit(REQEUST_COMMENT_LIST_TO_SPRING, res.data)
     })
+  },
+  requestAddCommentToSpring({}, payload) {
+    const { boardId, userToken, comment } = payload
+    return axiosInst.springAxiosInst.post(`${boardId}/comments/add-comment`, {userToken, comment})
+    .then((res) => {})
   }
 }
