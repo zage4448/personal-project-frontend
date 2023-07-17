@@ -3,13 +3,15 @@ import Vuex from 'vuex'
 
 import AccountModule from './account/AccountModule'
 import BoardModule from './board/BoardModule'
+import CommentModule from './comment/CommentModule'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
     accountModule: AccountModule,
-    boardModule: BoardModule
+    boardModule: BoardModule,
+    commentModule: CommentModule,
   },
 })
 

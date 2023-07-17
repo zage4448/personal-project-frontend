@@ -60,6 +60,17 @@
             <div class="buttons_for_comment">
               <v-btn style="text-transform: none;">댓글 달기</v-btn>
             </div>
+            <v-divider></v-divider>
+            <div class="board_current_comments">
+              <v-data-table
+                class="comment-table"
+                :headers="commentHeaders"
+                :items="comments"
+                hide-default-header
+                hide-default-footer
+                item-key="commentId">
+              </v-data-table>
+            </div>
           </div>
         </div>
       </div>
@@ -78,6 +89,21 @@ export default {
       comment: '',
       userToken: localStorage.getItem('userToken'),
       isBoardLiked: false,
+      commentHeaders: [
+        {
+          align: 'start',
+          value: 'content',
+          class: '*'
+        },
+        {
+          align: 'end',
+          value: 'nickname',
+        },
+        {
+          align: 'end',
+          value: 'createDate'
+        }
+      ]
     }
   },
   props: {
@@ -92,6 +118,9 @@ export default {
     boardId: {
       type: String,
       required: true
+    },
+    comments: {
+      type: Array
     }
   },
   beforeUpdate() {
@@ -246,6 +275,10 @@ export default {
 }
 .buttons_for_comment{
   text-align: end;
+  margin-bottom: 20px;
+}
+.board_current_comments{
+  margin-top: 20px;
 }
 
 .comment_button{
