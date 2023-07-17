@@ -58,17 +58,25 @@
               </v-textarea>
             </div>
             <div class="buttons_for_comment">
-              <v-btn style="text-transform: none;">댓글 달기</v-btn>
+              <v-btn style="text-transform: none;" @click="addComment">댓글 달기</v-btn>
             </div>
-            <v-divider></v-divider>
+            <v-divider class="board_divider"></v-divider>
             <div class="board_current_comments">
               <v-data-table
-                class="comment-table"
                 :headers="commentHeaders"
                 :items="comments"
                 hide-default-header
                 hide-default-footer
                 item-key="commentId">
+                <template #item="{ item }">
+                  <td colspan="3" class="comment-container">
+                    <div class="comment-content" v-html="item.content"></div>
+                    <div class="comment-meta">
+                      <div class="comment-nickname">{{ item.nickname }}</div>
+                      <div class="comment-created">{{ new Date(item.createDate).toLocaleDateString('en-US') }}</div>
+                    </div>
+                  </td>
+                </template>
               </v-data-table>
             </div>
           </div>
@@ -80,6 +88,7 @@
 import { mapActions } from 'vuex'
 
 const boardModule = 'boardModule'
+const commentModule = 'commentModule'
 
 
 export default {
@@ -95,14 +104,6 @@ export default {
           value: 'content',
           class: '*'
         },
-        {
-          align: 'end',
-          value: 'nickname',
-        },
-        {
-          align: 'end',
-          value: 'createDate'
-        }
       ]
     }
   },
@@ -147,6 +148,7 @@ export default {
   },
   methods: {
     ...mapActions(boardModule, ['requestIsBoardLikedToSpring', 'requestLikeBoardToSpring', 'requestUnlikeBoardToSpring', 'requestReadBoardToSpring']),
+    ...mapActions(commentModule, ['requestAddCommentToSpring', 'requestCommentListToSpring']),
     async checkIsBoardLiked() {
       if (this.userToken) {
         const { boardId, userToken } = this
@@ -175,6 +177,14 @@ export default {
       await this.requestUnlikeBoardToSpring({boardId, userToken})
       this.isBoardLiked = await this.requestIsBoardLikedToSpring({boardId, userToken})
       this.requestReadBoardToSpring(boardId)
+    },
+    async addComment() {
+      if (this.userToken) {
+        const { boardId, comment, userToken } = this
+        await this.requestAddCommentToSpring({ boardId, comment, userToken })
+        await this.requestCommentListToSpring(this.boardId)
+      }
+      else alert("로그인 후 이용 가능합니다")
     }
   }
 }
@@ -307,6 +317,28 @@ export default {
   margin-left: 18px;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.comment-container {
+  display: flex;
+  flex-direction: column;
+  padding: 9px;
+  border-bottom: 1px solid black;
+}
+
+.comment-content {
+  font-size: 1.5rem;
+}
+
+.comment-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+
+.comment-nickname,
+.comment-created {
+  color: #888;
 }
 
 </style>
