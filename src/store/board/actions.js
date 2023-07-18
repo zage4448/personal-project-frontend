@@ -95,5 +95,11 @@ export default {
   requestDeleteBoardToSpring({}, boardId) {
     return axiosInst.springAxiosInst.delete(`board/${boardId}/delete`)
     .then((res) => {})
-  }
+  },
+  requestMyLikedPostListToSpring({ commit }, userToken) {
+    return axiosInst.springAxiosInst.get(`board/${userToken}/my-liked-boards`)
+      .then((res) => {
+        commit(REQUEST_BOARD_LIST_TO_SPRING, res.data)
+      })
+  },
 }

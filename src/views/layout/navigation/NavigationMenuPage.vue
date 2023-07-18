@@ -75,7 +75,8 @@ export default {
     userToken: localStorage.getItem('userToken'),
     links: [
       { icon: "mdi-account-arrow-left", text: "My Page", method: "toMyPage"},
-      { icon: "mdi-account-box-multiple-outline", text: "My Posts", method: "toMyPosts"}
+      { icon: "mdi-account-box-multiple-outline", text: "My Posts", method: "toMyPosts"},
+      { icon: "mdi-account-star-outline", text: "Liked Posts", method: "toLikedPosts"}
     ]
     };
   },
@@ -111,6 +112,12 @@ export default {
     toMyPosts() {
       if (this.userToken !== null) {
         this.$router.push({name: 'MyPostsPage'})
+      }
+      else alert("로그인 해야 이용 할 수 있습니다")
+    },
+    toLikedPosts() {
+      if (this.userToken !== null) {
+        this.$router.push({name: 'MyLikedPostsPage'})
       }
       else alert("로그인 해야 이용 할 수 있습니다")
     }

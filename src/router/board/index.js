@@ -5,6 +5,7 @@ import BoardReadPage from "@/views/board/BoardReadPage.vue"
 import BoardRegisterPage from "@/views/board/BoardRegisterPage.vue"
 import MyPostsPage from "@/views/board/MyPostsPage.vue"
 import MyBoardManagePage from "@/views/board/MyBoardManagePage.vue"
+import MyLikedPostsPage from "@/views/board/MyLikedPostsPage.vue"
 
 Vue.use(VueRouter);
 
@@ -38,6 +39,11 @@ const boardRoutes = [
       props: {
         default: true
       }
+    },
+    {
+      path: "/my-liked-posts-page",
+      name: "MyLikedPostsPage",
+      component: MyLikedPostsPage,
     },
 ]
 
