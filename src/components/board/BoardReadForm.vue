@@ -334,6 +334,7 @@ export default {
   display: flex;
   justify-content: space-between;
   font-size: 0.8rem;
+  background-color: #CCC
 }
 
 .comment-nickname,

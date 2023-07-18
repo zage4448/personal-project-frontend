@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 
 import LoginPage from "@/views/account/LoginPage.vue"
 import SignupPage from "@/views/account/SignupPage.vue"
+import MyPage from "@/views/account/MyPage.vue"
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,11 @@ const accountRoutes = [
       path: "/signup-page",
       name: "SignupPage",
       component: SignupPage,
+    },
+    {
+      path: "/my-page",
+      name: "MyPage",
+      component: MyPage,
     },
 ]
 

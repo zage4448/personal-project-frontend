@@ -75,7 +75,12 @@ export default {
       })
       .catch((res) => {
         alert('로그아웃 실패')
+      })    
+  },
+  requestAccountInfoToSpring({}, userToken) {
+    return axiosInst.springAxiosInst.get(`/account/${userToken}/account-info`)
+      .then((res) => {
+        return res.data
       })
-      
   }
 }
