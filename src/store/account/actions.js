@@ -106,5 +106,11 @@ export default {
           alert("비밀번호 변경에 실패했습니다")
         }
       })
+  },
+  requestSignoutToSpring({}, userToken) {
+    return axiosInst.springAxiosInst.delete(`account/${userToken}/delete-account`)
+      .then((res) => {
+        localStorage.removeItem("userToken")
+      })
   }
 }

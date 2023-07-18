@@ -6,6 +6,7 @@ import SignupPage from "@/views/account/SignupPage.vue"
 import MyPage from "@/views/account/MyPage.vue"
 import ChangeNicknamePage from "@/views/account/ChangeNicknamePage.vue"
 import ChangePasswordPage from "@/views/account/ChangePasswordPage.vue"
+import SignoutPage from "@/views/account/SignoutPage.vue"
 
 Vue.use(VueRouter);
 
@@ -39,6 +40,16 @@ const accountRoutes = [
       path: "/change-password-page",
       name: "ChangePasswordPage",
       component: ChangePasswordPage,
+    },
+    {
+      path: "/signout-page",
+      name: "SignoutPage",
+      components: {
+        default: SignoutPage
+      },
+      props: {
+        default: true
+      }
     },
 ]
 

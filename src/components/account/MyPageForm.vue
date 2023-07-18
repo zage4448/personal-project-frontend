@@ -29,7 +29,7 @@
             <div align="end" style="margin-top: 80px; font-size: 24px;">
               <v-btn class="modify-btn" @click="toChangeNickname">닉네임 변경</v-btn>
               <v-btn class="modify-btn" @click="toChangePassword">비밀번호 변경</v-btn>
-              <v-btn class="modify-btn">회원 탈퇴</v-btn>
+              <v-btn class="modify-btn" @click="toSignout">회원 탈퇴</v-btn>
             </div>
           </v-card-text>
         </v-card>
@@ -56,6 +56,12 @@ export default {
     },
     toChangePassword() {
       this.$router.push({ name: 'ChangePasswordPage' })
+    },
+    toSignout() {
+      this.$router.push({ 
+        name: 'SignoutPage',
+        params: { email: this.accountInfo.email }
+    })
     }
   }
 }

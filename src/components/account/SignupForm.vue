@@ -93,7 +93,6 @@ export default {
       realPassword: "",
       nickname: "",
       authenticationNumber: '',
-      roleType: "",
       authenticationCode: '305186400354083',
       nicknamePass: false,
       emailPass: false,
