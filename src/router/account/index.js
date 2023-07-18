@@ -5,6 +5,7 @@ import LoginPage from "@/views/account/LoginPage.vue"
 import SignupPage from "@/views/account/SignupPage.vue"
 import MyPage from "@/views/account/MyPage.vue"
 import ChangeNicknamePage from "@/views/account/ChangeNicknamePage.vue"
+import ChangePasswordPage from "@/views/account/ChangePasswordPage.vue"
 
 Vue.use(VueRouter);
 
@@ -33,6 +34,11 @@ const accountRoutes = [
       props: {
         default: true
       }
+    },
+    {
+      path: "/change-password-page",
+      name: "ChangePasswordPage",
+      component: ChangePasswordPage,
     },
 ]
 

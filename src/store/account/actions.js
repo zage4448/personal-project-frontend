@@ -93,7 +93,18 @@ export default {
   },
   requestChangeNicknameToSpring({}, payload) {
     const { userToken, newNickname } = payload
-    return axiosInst.springAxiosInst.put(`account/${userToken}/change-nickname`, {newNickname: newNickname})
+    return axiosInst.springAxiosInst.put(`account/${userToken}/change-nickname`, {newNickname})
       .then((res) => {})
+  },
+  requestChangePasswordToSpring({}, payload) {
+    const { userToken, password, newPassword } = payload
+    return axiosInst.springAxiosInst.put(`account/${userToken}/change-password`, { password, newPassword })
+      .then((res) => {
+        if (res.data) {
+          alert("변경이 완료 됐습니다")
+        } else {
+          alert("비밀번호 변경에 실패했습니다")
+        }
+      })
   }
 }
