@@ -82,5 +82,18 @@ export default {
       .then((res) => {
         return res.data
       })
+  },
+  requestCheckPasswordToSpring({}, payload) {
+    const { userToken, password } = payload
+    return axiosInst.springAxiosInst.get(`account/${userToken}/check-password`, { params: {password: password} })
+      .then((res) => {
+        console.log(res.data)
+        return res.data
+      })
+  },
+  requestChangeNicknameToSpring({}, payload) {
+    const { userToken, newNickname } = payload
+    return axiosInst.springAxiosInst.put(`account/${userToken}/change-nickname`, {newNickname: newNickname})
+      .then((res) => {})
   }
 }

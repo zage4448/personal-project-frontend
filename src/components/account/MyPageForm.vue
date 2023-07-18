@@ -27,7 +27,7 @@
             </div>
             <v-divider style="margin-top: 50px;"></v-divider>
             <div align="end" style="margin-top: 80px; font-size: 24px;">
-              <v-btn class="modify-btn">닉네임 변경</v-btn>
+              <v-btn class="modify-btn" @click="toChangeNickname">닉네임 변경</v-btn>
               <v-btn class="modify-btn">비밀번호 변경</v-btn>
               <v-btn class="modify-btn">회원 탈퇴</v-btn>
             </div>
@@ -47,6 +47,14 @@ export default {
       required: true
     },
   },
+  methods: {
+    toChangeNickname() {
+      this.$router.push({ 
+        name: 'ChangeNicknamePage',
+        params: { nickname: this.accountInfo.nickname }
+      })
+    }
+  }
 }
 
 </script>
