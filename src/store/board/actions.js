@@ -91,5 +91,9 @@ export default {
     const { boardId, title, content } = payload
     return axiosInst.springAxiosInst.put(`board/${boardId}/modify-board`, { title, content })
     .then((res) => {})
+  },
+  requestDeleteBoardToSpring({}, boardId) {
+    return axiosInst.springAxiosInst.delete(`board/${boardId}/delete`)
+    .then((res) => {})
   }
 }
