@@ -28,8 +28,13 @@ export default {
   },
   components: {
     MyPostsForm
-  }
-    
+  },
+  created() {
+    if (this.userToken == null) {
+      alert("로그인 후 이용할 수 있습니다")
+      this.$router.push({name: 'home'})
+    }
+  },  
 }
 
 </script>
