@@ -91,6 +91,12 @@ export default {
 </script>
 
 <style>
+.my-posts-black-bar{
+  background-color: black;
+  height: 75px;
+  width: 100%;
+  margin-bottom: -25px;
+}
 .my_board_title_template {
   padding-left: 15px; 
   text-align: left;
