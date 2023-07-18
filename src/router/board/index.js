@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 
 import BoardReadPage from "@/views/board/BoardReadPage.vue"
 import BoardRegisterPage from "@/views/board/BoardRegisterPage.vue"
+import MyPostsPage from "@/views/board/MyPostsPage.vue"
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const boardRoutes = [
       path: "/board-register-page",
       name: "BoardRegisterPage",
       component: BoardRegisterPage,
+    },
+    {
+      path: "/my-posts-page",
+      name: "MyPostsPage",
+      component: MyPostsPage,
     },
 ]
 

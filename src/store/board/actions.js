@@ -80,5 +80,11 @@ export default {
     const { boardId, userToken } = payload
     return axiosInst.springAxiosInst.post('board/unLikeBoard', { boardId, userToken })
       .then((res) => {})
+  },
+  requestMyPostListToSpring({ commit }, userToken) {
+    return axiosInst.springAxiosInst.get(`board/${userToken}/my-boards`)
+      .then((res) => {
+        commit(REQUEST_BOARD_LIST_TO_SPRING, res.data)
+      })
   }
 }
