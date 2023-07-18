@@ -8,7 +8,8 @@
         :items="pagedItems"
         :pagination.sync="pagination"
         item-key="boardId"
-        item-value="boardId">
+        item-value="boardId"
+        @click:row="toManageBoard">
         <template v-slot:item.title="{ item }">
           <div class="my_board_title_template">
             <div style="font-size: 18px">{{ item.title }}</div>
@@ -66,6 +67,13 @@ export default {
   },
   methods: {
     ...mapActions(boardModule, ['requestMyPostListToSpring']),
+    toManageBoard(event, { item }) {
+      const boardId = item.boardId
+      this.$router.push({
+        name: 'MyBoardManagePage',
+        params: {boardId: boardId.toString()}
+      })
+    },
   },
   async mounted() {
     await this.requestMyPostListToSpring(this.userToken)

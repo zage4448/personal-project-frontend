@@ -86,5 +86,10 @@ export default {
       .then((res) => {
         commit(REQUEST_BOARD_LIST_TO_SPRING, res.data)
       })
+  },
+  requestModifyBoardToSpring({}, payload) {
+    const { boardId, title, content } = payload
+    return axiosInst.springAxiosInst.put(`board/${boardId}/modify-board`, { title, content })
+    .then((res) => {})
   }
 }
