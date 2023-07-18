@@ -67,7 +67,7 @@ const accountModule = 'accountModule'
     data() {
       return {
         userToken: localStorage.getItem('userToken'),
-        isPasswordPass: true,
+        isPasswordPass: false,
         password: '',
         authenticationNumber: '',
         authenticationCode: '305186400354083',
