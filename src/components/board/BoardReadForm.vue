@@ -188,6 +188,7 @@ export default {
         await this.requestAddCommentToSpring({ boardId, comment, userToken })
         await this.requestCommentListToSpring(this.boardId)
         await this.requestReadBoardToSpring(boardId)
+        this.comment = ''
       }
       else alert("로그인 후 이용 가능합니다")
     },
