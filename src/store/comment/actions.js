@@ -15,5 +15,10 @@ export default {
     const { boardId, userToken, comment } = payload
     return axiosInst.springAxiosInst.post(`${boardId}/comments/add-comment`, {userToken, comment})
     .then((res) => {})
+  },
+  requestDeleteCommentToSpring({}, payload) {
+    const { boardId, commentId } = payload
+    return axiosInst.springAxiosInst.delete(`${boardId}/comments/${commentId}/delete`)
+    .then((res) => {})
   }
 }

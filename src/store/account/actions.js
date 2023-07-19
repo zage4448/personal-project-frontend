@@ -9,7 +9,9 @@ export default {
         if (res.data.userToken != null) {
           alert("로그인 성공!");
           let userToken = res.data.userToken;
+          let nickname = res.data.nickname;
           localStorage.setItem("userToken", userToken);
+          localStorage.setItem("nickname", nickname)
           return true
         } else {
           alert("로그인 실패!");

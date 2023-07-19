@@ -70,10 +70,13 @@
                 item-key="commentId">
                 <template #item="{ item }">
                   <td colspan="3" class="comment-container">
-                    <div class="comment-content" v-html="item.content"></div>
                     <div class="comment-meta">
                       <div class="comment-nickname">{{ item.nickname }}</div>
                       <div class="comment-created">{{ new Date(item.createDate).toLocaleDateString('en-US') }}</div>
+                    </div>
+                    <div class="comment-content">
+                      <v-icon v-if="userNickname == item.nickname" class="delete-icon" @click="deleteComment(item.commentId)">mdi-trash-can</v-icon>
+                      <span v-html="item.content"></span>
                     </div>
                   </td>
                 </template>
@@ -97,6 +100,7 @@ export default {
       backgroundImage: '',
       comment: '',
       userToken: localStorage.getItem('userToken'),
+      userNickname: localStorage.getItem('nickname'),
       isBoardLiked: false,
       commentHeaders: [
         {
@@ -148,7 +152,7 @@ export default {
   },
   methods: {
     ...mapActions(boardModule, ['requestIsBoardLikedToSpring', 'requestLikeBoardToSpring', 'requestUnlikeBoardToSpring', 'requestReadBoardToSpring']),
-    ...mapActions(commentModule, ['requestAddCommentToSpring', 'requestCommentListToSpring']),
+    ...mapActions(commentModule, ['requestAddCommentToSpring', 'requestCommentListToSpring', 'requestDeleteCommentToSpring']),
     async checkIsBoardLiked() {
       if (this.userToken) {
         const { boardId, userToken } = this
@@ -183,10 +187,19 @@ export default {
         const { boardId, comment, userToken } = this
         await this.requestAddCommentToSpring({ boardId, comment, userToken })
         await this.requestCommentListToSpring(this.boardId)
+        await this.requestReadBoardToSpring(boardId)
       }
       else alert("로그인 후 이용 가능합니다")
-    }
-  }
+    },
+    async deleteComment(commentId) {
+      if (confirm("댓글을 삭제 하시겠습니까?")) {
+        const { boardId } = this
+        await this.requestDeleteCommentToSpring({boardId, commentId})
+        await this.requestCommentListToSpring(this.boardId)
+        await this.requestReadBoardToSpring(boardId)
+      }
+    },
+  },
 }
 </script>
 
@@ -328,6 +341,7 @@ export default {
 
 .comment-content {
   font-size: 1.5rem;
+  position: relative;
 }
 
 .comment-meta {
@@ -340,6 +354,13 @@ export default {
 .comment-nickname,
 .comment-created {
   color: #888;
+}
+
+.delete-icon{
+  position: absolute;
+  float: right;
+  margin-top: 3px;
+  cursor: pointer;
 }
 
 </style>
