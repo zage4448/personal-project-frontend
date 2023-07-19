@@ -54,15 +54,17 @@
         hide-default-header
         hide-default-footer
         item-key="commentId">
-          <template #item="{ item }">
-            <td colspan="3" class="comment-container">
-              <div class="comment-content" v-html="item.content"></div>
-              <div class="comment-meta">
-                <div class="comment-nickname">{{ item.nickname }}</div>
-                <div class="comment-created">{{ new Date(item.createDate).toLocaleDateString('en-US') }}</div>
-              </div>
-            </td>
-          </template>
+        <template #item="{ item }">
+          <td colspan="3" class="comment-container">
+            <div class="comment-meta">
+              <div class="comment-nickname">{{ item.nickname }}</div>
+              <div class="comment-created">{{ new Date(item.createDate).toLocaleDateString('en-US') }}</div>
+            </div>
+            <div class="comment-content">
+              <span v-html="item.content"></span>
+            </div>
+          </td>
+        </template>
       </v-data-table>
     </div>
   </div>
