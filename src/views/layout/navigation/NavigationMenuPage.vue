@@ -94,6 +94,7 @@ export default {
     async logout () {
       await this.requestLogoutToSpring(this.userToken)
       localStorage.removeItem('userToken')
+      localStorage.removeItem('nickname')
       await this.$router.push({name: 'home'})
         .catch( 
           location.reload()
