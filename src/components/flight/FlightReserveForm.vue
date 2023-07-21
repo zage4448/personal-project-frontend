@@ -79,13 +79,63 @@
         </v-list>
       </v-menu>
     </div>
+    <div>
+    </div>
       <div class="date-container">
-        <span class="date-title">Depart</span>
-        <input v-model="departureDate" type="date" style="margin-top: 10px;">
+        <v-menu
+        ref="menu"
+        v-model="menu"
+        :close-on-content-click="true"
+        :return-value.sync="date"
+        transition="scale-transition"
+        offset-y
+        min-width="auto"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field
+            v-model="departureDate"
+            label="가는 날"
+            prepend-icon="mdi-calendar"
+            readonly
+            v-bind="attrs"
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <v-date-picker
+          v-model="departureDate"
+          no-title
+          scrollable
+        >
+        </v-date-picker>
+      </v-menu>
       </div>
       <div v-if="roundTrip" class="date-container">
-        <span class="date-title">Return</span>
-        <input v-model="returnDate" type="date" style="margin-top: 10px;">
+        <v-menu
+        ref="menu"
+        v-model="menu"
+        :close-on-content-click="true"
+        :return-value.sync="date"
+        transition="scale-transition"
+        offset-y
+        min-width="auto"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field
+            v-model="returnDate"
+            label="오는 날"
+            prepend-icon="mdi-calendar"
+            readonly
+            v-bind="attrs"
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <v-date-picker
+          v-model="returnDate"
+          no-title
+          scrollable
+        >
+        </v-date-picker>
+      </v-menu>
       </div>
       <div>
         <div v-if="!showPassengerSelect" style="margin-top: 32px;">
@@ -299,7 +349,7 @@ export default {
           infant: 0,
         },
         showPassengerSelect: false,
-        departureDate: '',
+        departureDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
         returnDate: '',
         oneWayOnly: false,
         buttons: [
@@ -374,7 +424,7 @@ export default {
         ]
         this.roundTrip = false
       }
-    }
+    },
   },
   computed: {
     totalPassengers() {
@@ -446,9 +496,6 @@ div {
   flex-direction: column;
   align-items: center;
   margin-top: 13px;
-}
-.date-title{
-  font-weight: bold;
 }
 
 .checkbox-container{
