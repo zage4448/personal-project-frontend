@@ -86,7 +86,6 @@
         ref="menu"
         v-model="menu"
         :close-on-content-click="true"
-        :return-value.sync="date"
         transition="scale-transition"
         offset-y
         min-width="auto"
@@ -114,7 +113,6 @@
         ref="menu"
         v-model="menu"
         :close-on-content-click="true"
-        :return-value.sync="date"
         transition="scale-transition"
         offset-y
         min-width="auto"
@@ -177,7 +175,9 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 
+const flightModule = 'flightModule'
 
 export default {
   data() {
@@ -356,10 +356,11 @@ export default {
           { label: "왕복", isDisabled: true, textColor: "#CCCCCC"},
           { label: "편도", isDisabled: false, textColor: "white"},
         ],
-        roundTrip: true
+        roundTrip: true,
     }
   },
   methods: {
+    ...mapActions(flightModule, ['requestFlightProductsToFastAPI']),
     toggleAreaSelection() {
       this.showAreas = !this.showAreas;
       if (!this.showAreas) {
@@ -423,8 +424,22 @@ export default {
           { label: "편도", isDisabled: true, textColor: "#CCCCCC"},
         ]
         this.roundTrip = false
+        this.returnDate = ''
       }
     },
+    async searchFlights() {
+      const originLocationCode = this.departureAirport.code
+      const destinationLocationCode = this.arrivalAirport.code
+      const departureDate = this.departureDate
+      const returnDate = this.returnDate
+      const nonStop = this.oneWayOnly
+      const adults = this.passengers.adult
+      const children = this.passengers.child
+      const infants = this.passengers.infant
+      console.log(originLocationCode, destinationLocationCode, departureDate, returnDate, nonStop, adults, children, infants)
+      await this.requestFlightProductsToFastAPI({ originLocationCode, destinationLocationCode, departureDate, returnDate, nonStop, adults, children, infants })
+      // await this.$router.push({ name: 'FlightProductListPage' })
+    }
   },
   computed: {
     totalPassengers() {
