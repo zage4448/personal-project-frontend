@@ -74,6 +74,7 @@ async mounted() {
   margin-top: 450px; 
   position: absolute;
   width: 100%;
+  padding-bottom: 80px;
 }
 
 </style>

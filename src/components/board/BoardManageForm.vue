@@ -9,22 +9,9 @@
     <div class="board_category_title">
       in {{ board.boardCategory }}
     </div>
-    <div class="board_right">
-      <div class="board_buttons">
-        <button v-if="!isEdit" class="manage_button" @click="isEdit=!isEdit">Edit</button>
-        <button v-if="isEdit" class="clicked_manage_button" @click="isEdit=!isEdit">Edit</button>
-        <button class="manage_button" @click="openDeleteConfirmation">Delete</button>
-      </div>
-      <div class="views_and_comments">
-        <v-icon>mdi-eye</v-icon>
-        {{ board.views }} views <br>
-        <v-icon>mdi-message</v-icon>
-        {{ board.commentCount }} comments <br>
-        <v-icon>mdi-thumb-up-outline</v-icon> 
-        {{ board.likeCount }} likes
-      </div>
-    </div>
-    <div class="board_left">
+    <v-row>
+      <v-col cols="10">
+        <div class="manage_board_left">
     <div class="board_info">
       {{ board.writer }}<br> 
       <div>작성일자: {{ new Date(board.createDate).toLocaleDateString('en-US') }}</div>
@@ -68,6 +55,25 @@
       </v-data-table>
     </div>
   </div>
+      </v-col>
+      <v-col cols="2" class="right_col">
+        <div class="manage_board_right">
+      <div class="board_buttons">
+        <button v-if="!isEdit" class="manage_button" @click="isEdit=!isEdit">Edit</button>
+        <button v-if="isEdit" class="clicked_manage_button" @click="isEdit=!isEdit">Edit</button>
+        <button class="manage_button" @click="openDeleteConfirmation">Delete</button>
+      </div>
+      <div class="views_and_comments">
+        <v-icon>mdi-eye</v-icon>
+        {{ board.views }} views <br>
+        <v-icon>mdi-message</v-icon>
+        {{ board.commentCount }} comments <br>
+        <v-icon>mdi-thumb-up-outline</v-icon> 
+        {{ board.likeCount }} likes
+      </div>
+    </div>
+</v-col>
+</v-row>
 
   <div v-if="showConfirmation" class="popup-container">
       <div class="popup" align="center">
@@ -179,8 +185,9 @@ export default {
   background-color: white;
   margin-left: 7rem;
   margin-right: 7rem;
-  position: absolute;
   height: auto;
+  overflow: hidden;
+  padding-bottom: 50px;
 }  
 .manage_button{
   background-color: white;
@@ -191,6 +198,7 @@ export default {
   border: black solid 1px;
   margin-top: 18px
 }
+
 .clicked_manage_button{
   background-color: #CCC;
   width: 170px;
