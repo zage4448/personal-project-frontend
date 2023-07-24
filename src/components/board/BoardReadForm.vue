@@ -9,80 +9,86 @@
           <div class="board_category_title">
             in {{ board.boardCategory }}
           </div>
-          <div class="board_right">
-            <div class="board_buttons">
-              <button class="save_button">Save</button>
-            </div>
-            <div class="views_and_comments">
-              <v-icon>mdi-eye</v-icon>
-              {{ board.views }} views <br>
-              <v-icon>mdi-message</v-icon>
-              {{ board.commentCount }} comments <br>
-              <v-icon>mdi-thumb-up-outline</v-icon> 
-              {{ board.likeCount }} likes
-            </div>
-            <div class="similar_posts">
-              <h4 style="line-height: 3;">Similar Posts</h4>
-              <button class="similar_posts_button" v-for="board in relatedBoardList" :key="board.boardId" @click="toRelatedBoard(board.boardId)">
-                {{ board.title }}
-              </button>
-            </div>
-          </div>
-          <div class="board_left">
-            <div class="board_info">
-              {{ board.writer }}<br> 
-              <div>작성일자: {{ new Date(board.createDate).toLocaleDateString('en-US') }}</div>
-              <div v-if="board.updateDate && board.updateDate != board.createDate">
-                수정일자: {{ new Date(board.updateDate).toLocaleDateString('en-US') }}
+          <v-row>
+            <v-col cols="10">
+              <div class="board_left">
+                <div class="board_info">
+                  {{ board.writer }}<br> 
+                  <div>작성일자: {{ new Date(board.createDate).toLocaleDateString('en-US') }}</div>
+                  <div v-if="board.updateDate && board.updateDate != board.createDate">
+                    수정일자: {{ new Date(board.updateDate).toLocaleDateString('en-US') }}
+                  </div>
+                </div>
+                <div class="board_content" v-html="board.content">
+                </div>
+                <div class="board_like" v-if="!isBoardLiked" >
+                  <button @click="likeBoard"><v-icon>mdi-thumb-up-outline</v-icon> Like</button>
+                </div>
+                <div class="board_like" v-if="isBoardLiked" >
+                  <button @click="unlikeBoard"><v-icon style="color: blue">mdi-thumb-up</v-icon> Like</button>
+                </div>
+                <v-divider class="board_divider"></v-divider>
+                <div class="board_comments">
+                  <h4 style="line-height: 3;">Comments</h4>
+                  <v-textarea 
+                    label="comment" 
+                    clearable
+                    outlined
+                    auto-grow
+                    rows="2"
+                    row-height="15"
+                    v-model="comment">
+                  </v-textarea>
+                </div>
+                <div class="buttons_for_comment">
+                  <v-btn style="text-transform: none;" @click="addComment">댓글 달기</v-btn>
+                </div>
+                <v-divider class="board_divider"></v-divider>
+                <div class="board_current_comments">
+                  <v-data-table
+                    :headers="commentHeaders"
+                    :items="comments"
+                    hide-default-header
+                    hide-default-footer
+                    item-key="commentId">
+                    <template #item="{ item }">
+                      <td colspan="3" class="comment-container">
+                        <div class="comment-meta">
+                          <div class="comment-nickname">{{ item.nickname }}</div>
+                          <div class="comment-created">{{ new Date(item.createDate).toLocaleDateString('en-US') }}</div>
+                        </div>
+                        <div class="comment-content">
+                          <v-icon v-if="userNickname == item.nickname" class="delete-icon" @click="deleteComment(item.commentId)">mdi-trash-can</v-icon>
+                          <span v-html="item.content"></span>
+                        </div>
+                      </td>
+                    </template>
+                  </v-data-table>
+                </div>
               </div>
-            </div>
-            <div class="board_content" v-html="board.content">
-            </div>
-            <div class="board_like" v-if="!isBoardLiked" >
-              <button @click="likeBoard"><v-icon>mdi-thumb-up-outline</v-icon> Like</button>
-            </div>
-            <div class="board_like" v-if="isBoardLiked" >
-              <button @click="unlikeBoard"><v-icon style="color: blue">mdi-thumb-up</v-icon> Like</button>
-            </div>
-            <v-divider class="board_divider"></v-divider>
-            <div class="board_comments">
-              <h4 style="line-height: 3;">Comments</h4>
-              <v-textarea 
-                label="comment" 
-                clearable
-                outlined
-                auto-grow
-                rows="2"
-                row-height="15"
-                v-model="comment">
-              </v-textarea>
-            </div>
-            <div class="buttons_for_comment">
-              <v-btn style="text-transform: none;" @click="addComment">댓글 달기</v-btn>
-            </div>
-            <v-divider class="board_divider"></v-divider>
-            <div class="board_current_comments">
-              <v-data-table
-                :headers="commentHeaders"
-                :items="comments"
-                hide-default-header
-                hide-default-footer
-                item-key="commentId">
-                <template #item="{ item }">
-                  <td colspan="3" class="comment-container">
-                    <div class="comment-meta">
-                      <div class="comment-nickname">{{ item.nickname }}</div>
-                      <div class="comment-created">{{ new Date(item.createDate).toLocaleDateString('en-US') }}</div>
-                    </div>
-                    <div class="comment-content">
-                      <v-icon v-if="userNickname == item.nickname" class="delete-icon" @click="deleteComment(item.commentId)">mdi-trash-can</v-icon>
-                      <span v-html="item.content"></span>
-                    </div>
-                  </td>
-                </template>
-              </v-data-table>
-            </div>
-          </div>
+            </v-col>
+              <v-col cols="2">
+              <div class="board_right">
+                <div class="board_buttons">
+                  <button class="save_button">Save</button>
+                </div>
+                <div class="views_and_comments">
+                  <v-icon>mdi-eye</v-icon>
+                  {{ board.views }} views <br>
+                  <v-icon>mdi-message</v-icon>
+                  {{ board.commentCount }} comments <br>
+                  <v-icon>mdi-thumb-up-outline</v-icon> 
+                  {{ board.likeCount }} likes
+                </div>
+                <div class="similar_posts">
+                  <h4 style="line-height: 3;">Similar Posts</h4>
+                  <button class="similar_posts_button" v-for="board in relatedBoardList" :key="board.boardId" @click="toRelatedBoard(board.boardId)">
+                    {{ board.title }}
+                  </button>
+                </div>
+              </div>
+            </v-col>
+          </v-row>
         </div>
       </div>
     </div>
@@ -129,25 +135,6 @@ export default {
     }
   },
   beforeUpdate() {
-    if (this.board.boardCategory == "Asia") {
-      this.backgroundImage = require("@/assets/images/asia_banner.jpg")
-    }
-    else if (this.board.boardCategory == "Europe") {
-      this.backgroundImage = require("@/assets/images/europe_banner.jpg")
-    }
-    else if (this.board.boardCategory == "North_America") {
-      this.backgroundImage = require("@/assets/images/north_america_banner.jpg")
-    }
-    else if (this.board.boardCategory == "South_America") {
-      this.backgroundImage = require("@/assets/images/south_america_banner.jpg")
-    }
-    else if (this.board.boardCategory == "Africa") {
-      this.backgroundImage = require("@/assets/images/africa_banner.jpg")
-    }
-    else if (this.board.boardCategory == "Australia") {
-      this.backgroundImage = require("@/assets/images/australia_banner.jpg")
-    }
-
     this.checkIsBoardLiked()
   },
   methods: {
@@ -205,13 +192,6 @@ export default {
 </script>
 
 <style>
-.category_banner {
-  height: 500px;
-  width: 100%; 
-  background-position: center;
-  background-size: cover;
-  position: absolute;
-}   
 .category_title{
   color: white;
   font-size: 42px;
@@ -224,19 +204,9 @@ export default {
   background-color: white;
   margin-left: 7rem;
   margin-right: 7rem;
-  margin-top: 450px;
-  position:absolute;
   height: auto;
-}
-.board_left{
-  width: 70%;
-  float: left;
-  box-sizing: border-box;
-}
-.board_right{
-  width: 20%;
-  float: right;
-  box-sizing: border-box;
+  overflow: hidden;
+  padding-bottom: 50px
 }
 .board_title{
   background-color: black;

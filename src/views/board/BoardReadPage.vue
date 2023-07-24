@@ -1,10 +1,13 @@
 <template>
   <div>
-    <div>
-      <BoardReadForm :board="board" 
-                     :relatedBoardList="relatedBoardList" 
-                     :boardId="boardId"
-                     :comments="comments"/>
+    <div class="board_banner" :style="{ backgroundImage: `url(${backgroundImage})`}"></div>
+    <div class="board_read_divider">
+      <div>
+        <BoardReadForm :board="board" 
+                      :relatedBoardList="relatedBoardList" 
+                      :boardId="boardId"
+                      :comments="comments"/>
+      </div>
     </div>
   </div>
 </template>
@@ -17,6 +20,11 @@ const boardModule = 'boardModule'
 const commentModule = 'commentModule'
 
 export default {
+  data() {
+    return {
+      backgroundImage: ''
+    }
+  },
   components: {
     BoardReadForm
   },
@@ -34,15 +42,46 @@ export default {
     ...mapActions(boardModule, ['requestReadBoardToSpring', 'requestRelatedBoardListToSpring']),
     ...mapActions(commentModule, ['requestCommentListToSpring'])
   },
-  mounted() {
-    this.requestReadBoardToSpring(this.boardId)
-    this.requestRelatedBoardListToSpring(this.boardId)
-    this.requestCommentListToSpring(this.boardId)
+  async mounted() {
+    await this.requestReadBoardToSpring(this.boardId)
+    await this.requestRelatedBoardListToSpring(this.boardId)
+    await this.requestCommentListToSpring(this.boardId)
+
+    if (this.board.boardCategory == "Asia") {
+      this.backgroundImage = require("@/assets/images/asia_banner.jpg")
+    }
+    else if (this.board.boardCategory == "Europe") {
+      this.backgroundImage = require("@/assets/images/europe_banner.jpg")
+    }
+    else if (this.board.boardCategory == "North_America") {
+      this.backgroundImage = require("@/assets/images/north_america_banner.jpg")
+    }
+    else if (this.board.boardCategory == "South_America") {
+      this.backgroundImage = require("@/assets/images/south_america_banner.jpg")
+    }
+    else if (this.board.boardCategory == "Africa") {
+      this.backgroundImage = require("@/assets/images/africa_banner.jpg")
+    }
+    else if (this.board.boardCategory == "Australia") {
+      this.backgroundImage = require("@/assets/images/australia_banner.jpg")
+    }
   }
 }
 
 </script>
 
 <style>
-    
+.board_banner {
+  height: 500px;
+  width: 100%; 
+  background-position: center;
+  background-size: cover;
+  position: absolute;
+}
+.board_read_divider{
+  margin-top: 450px; 
+  position: absolute;
+  width: 100%;
+  padding-bottom: 80px;
+}       
 </style>
