@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div v-if="!flightProducts || (Array.isArray(flightProducts) && flightProducts.length === 0)">
-      <FlightProductListLoadingForm/>
-    </div>
-    <div v-else>
+    <div>
       <v-data-table
         class="flights_table"
         :headers="headers"
