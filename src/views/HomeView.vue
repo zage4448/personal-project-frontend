@@ -49,7 +49,7 @@ export default {
         },
         departureDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
         returnDate: '',
-        oneWayOnly: false
+        oneWayOnly: true,
     }
   },
   components: {
