@@ -1,5 +1,6 @@
 import {
     REQUEST_FLIGHT_PRODUCT_LIST_TO_FAST_API,
+    SAVE_FLIGHT_SEARCH_ELEMENT
 } from './mutation-types'
 
 import axiosInst from '@/utility/axiosInst'
@@ -16,5 +17,8 @@ export default {
       .then((res) => {
         commit(REQUEST_FLIGHT_PRODUCT_LIST_TO_FAST_API, res.data)
       })
+  },
+  saveFlightSearchElement({ commit }, payload) {
+    return commit(SAVE_FLIGHT_SEARCH_ELEMENT, payload)
   }
 }

@@ -7,6 +7,7 @@
           {{ button.label }}
         </button>
     </div>
+    <form @submit.prevent="searchFlights">
     <div class="search-toolbar">
       <div>
         <div class="airport-buttons">
@@ -147,21 +148,21 @@
               인원수: ({{ passengerLabel }})
             </v-btn> <br>
             <span>성인: </span>
-            <button class="passenger-button" @click="incrementPassenger('adult')">+</button>
+            <button class="passenger-button" @click="incrementPassenger('adult')" type="button">+</button>
             <span>{{ passengers.adult }}</span>
-            <button class="passenger-button" @click="decrementPassenger('adult')">-</button>
+            <button class="passenger-button" @click="decrementPassenger('adult')" type="button">-</button>
           </div>
           <div>
             <span>소인: </span>
-            <button class="passenger-button" @click="incrementPassenger('child')">+</button>
+            <button class="passenger-button" @click="incrementPassenger('child')" type="button">+</button>
             <span>{{ passengers.child }}</span>
-            <button class="passenger-button" @click="decrementPassenger('child')">-</button>
+            <button class="passenger-button" @click="decrementPassenger('child')" type="button">-</button>
           </div>
           <div>
             <span>유아: </span>
-            <button class="passenger-button" @click="incrementPassenger('infant')">+</button>
+            <button class="passenger-button" @click="incrementPassenger('infant')" type="button">+</button>
             <span>{{ passengers.infant }}</span>
-            <button class="passenger-button" @click="decrementPassenger('infant')">-</button>
+            <button class="passenger-button" @click="decrementPassenger('infant')" type="button">-</button>
           </div>
         </div>
       </div>
@@ -169,8 +170,9 @@
         <span class="checkbox-label">직항만</span>
         <v-checkbox color="secondary" v-model="oneWayOnly"></v-checkbox>
       </div>
-      <v-btn class="search-button" @click="searchFlights">항공권 검색</v-btn>
+      <v-btn class="search-button" type="submit">항공권 검색</v-btn>
     </div>
+    </form>
   </div>
 </template>
 
@@ -180,12 +182,33 @@ import { mapActions } from 'vuex';
 const flightModule = 'flightModule'
 
 export default {
+  props: {
+    departureAirport: {
+      type: Object,
+    },
+    arrivalAirport: {
+      type: Object,
+    },
+    passengers: {
+      type: Object
+    },
+    departureDate: {
+      type: Date
+    },
+    returnDate: {
+      type: Date
+    },
+    oneWayOnly: {
+      type: Boolean
+    },
+    roundTrip: {
+      type: Boolean
+    }
+  },
   data() {
     return {
         departureArea: null,
-        departureAirport: { code: 'ICN', name: '인천' },
         arrivalArea: null,
-        arrivalAirport: { code: 'KIX', name: '오사카' },
         areas: [
           { name: '국내', airports: [
             { code: 'ICN', name: '인천', airport: '인천국제공항', country: '대한민국' },
@@ -343,19 +366,12 @@ export default {
         showDepAirports: false,
         showArrAreas: true,
         showArrAirports: false,
-        passengers: {
-          adult: 1,
-          child: 0,
-          infant: 0,
-        },
         showPassengerSelect: false,
-        departureDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-        returnDate: '',
-        oneWayOnly: false,
-        buttons: [
-          { label: "왕복", isDisabled: true, textColor: "#CCCCCC"},
-          { label: "편도", isDisabled: false, textColor: "white"},
-        ],
+        buttons: [],
+        // buttons: [
+        //   { label: "왕복", isDisabled: true, textColor: "#CCCCCC"},
+        //   { label: "편도", isDisabled: false, textColor: "white"},
+        // ],
         roundTrip: true,
     }
   },
@@ -428,18 +444,23 @@ export default {
       }
     },
     async searchFlights() {
-      const originLocationCode = this.departureAirport.code
-      const destinationLocationCode = this.arrivalAirport.code
-      const departureDate = this.departureDate
-      const returnDate = this.returnDate
-      const nonStop = this.oneWayOnly
-      const adults = this.passengers.adult
-      const children = this.passengers.child
-      const infants = this.passengers.infant
-      console.log(originLocationCode, destinationLocationCode, departureDate, returnDate, nonStop, adults, children, infants)
-      await this.$router.push({ name: 'FlightProductListPage' })
-      await this.requestFlightProductsToFastAPI({ originLocationCode, destinationLocationCode, departureDate, returnDate, nonStop, adults, children, infants })
-
+      const {
+        departureAirport, 
+        arrivalAirport, 
+        departureDate, 
+        returnDate, 
+        oneWayOnly, 
+        passengers,
+        roundTrip} = this
+    
+      this.$emit('submit', {
+        departureAirport, 
+        arrivalAirport, 
+        departureDate, 
+        returnDate, 
+        oneWayOnly, 
+        passengers,
+        roundTrip});
     }
   },
   computed: {
@@ -464,6 +485,19 @@ export default {
       }
     },
   },
+  created() {
+    if (!this.roundTrip) {
+      this.buttons = [
+          { label: "왕복", isDisabled: false, textColor: "white"},
+          { label: "편도", isDisabled: true, textColor: "#CCCCCC"},
+        ]
+    } else {
+      this.buttons = [
+          { label: "왕복", isDisabled: true, textColor: "#CCCCCC"},
+          { label: "편도", isDisabled: false, textColor: "white"},
+        ]
+    }
+  }
 }
 </script>
 

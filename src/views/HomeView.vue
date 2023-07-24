@@ -3,7 +3,13 @@
     <div class="flightBackground"></div>
     <div class="flightReserveDivider">
       <div class="flightReserveForm">
-        <FlightReserveForm/>
+        <FlightReserveForm @submit="searchFlights"
+          :departureAirport="departureAirport"
+          :arrivalAirport="arrivalAirport"
+          :passengers="passengers"
+          :departureDate="departureDate"
+          :returnDate="returnDate"
+          :oneWayOnly="oneWayOnly"/>
       </div>
     </div>
     <div class="boardTitleBackground">
@@ -27,11 +33,70 @@
 <script>
 import MainBoardListForm from '@/components/board/MainBoardListForm.vue'
 import FlightReserveForm from '@/components/flight/FlightReserveForm.vue'
+import { mapActions } from 'vuex'
+
+const flightModule = 'flightModule'
 
 export default {
+  data() {
+    return{
+      departureAirport: { code: 'ICN', name: '인천' },
+      arrivalAirport: { code: 'KIX', name: '오사카' },
+      passengers: {
+          adult: 1,
+          child: 0,
+          infant: 0,
+        },
+        departureDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+        returnDate: '',
+        oneWayOnly: false
+    }
+  },
   components: {
     MainBoardListForm,
     FlightReserveForm
+  },
+  methods: {
+    ...mapActions(flightModule, ['requestFlightProductsToFastAPI', 'saveFlightSearchElement']),
+    
+    async searchFlights(payload) {
+      const originLocationCode = payload.departureAirport.code
+      const destinationLocationCode = payload.arrivalAirport.code
+      const departureDate = payload.departureDate
+      const returnDate = payload.returnDate
+      const nonStop = payload.oneWayOnly
+      const adults = payload.passengers.adult
+      const children = payload.passengers.child
+      const infants = payload.passengers.infant
+      const departureAirport = payload.departureAirport
+      const arrivalAirport = payload.arrivalAirport
+      const passengers = payload.passengers
+      const roundTrip = payload.roundTrip
+      
+      await this.saveFlightSearchElement({
+        departureAirport,
+        arrivalAirport,
+        departureDate,
+        returnDate,
+        nonStop,
+        passengers,
+        roundTrip
+      })
+      await this.$router.push({ 
+        name: 'FlightProductListPage',
+      })
+        console.log(payload.departureAirport)
+      await this.requestFlightProductsToFastAPI({
+        originLocationCode,
+        destinationLocationCode,
+        departureDate,
+        returnDate,
+        nonStop,
+        adults,
+        children,
+        infants
+      })
+    }
   }
 }
 

@@ -84,14 +84,16 @@
 <script>
 import { mapState } from 'vuex';
 import FlightProductListLoadingForm from "@/components/flight/FlightProductListLoadingForm.vue"
+import FlightReserveForm from './FlightReserveForm.vue';
 
 const flightModule = 'flightModule'
 
 
 export default {
   components: {
-    FlightProductListLoadingForm
-  },
+    FlightProductListLoadingForm,
+    FlightReserveForm
+},
   data() {
     return{
       flightHeader: [
