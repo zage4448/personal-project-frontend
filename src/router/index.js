@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import accountRoutes from './account'
 import boardRoutes from './board'
+import flightRoutes from './flight'
 
 Vue.use(VueRouter)
 
@@ -23,6 +24,7 @@ const routes = [
 
   ...accountRoutes,
   ...boardRoutes,
+  ...flightRoutes,
 ]
 
 const router = new VueRouter({

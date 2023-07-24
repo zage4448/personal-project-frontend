@@ -437,8 +437,9 @@ export default {
       const children = this.passengers.child
       const infants = this.passengers.infant
       console.log(originLocationCode, destinationLocationCode, departureDate, returnDate, nonStop, adults, children, infants)
+      await this.$router.push({ name: 'FlightProductListPage' })
       await this.requestFlightProductsToFastAPI({ originLocationCode, destinationLocationCode, departureDate, returnDate, nonStop, adults, children, infants })
-      // await this.$router.push({ name: 'FlightProductListPage' })
+
     }
   },
   computed: {
