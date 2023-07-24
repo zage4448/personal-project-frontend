@@ -9,7 +9,8 @@
           :passengers="passengers"
           :departureDate="departureDate"
           :returnDate="returnDate"
-          :oneWayOnly="oneWayOnly"/>
+          :oneWayOnly="oneWayOnly"
+          :roundTrip="roundTrip"/>
       </div>
     </div>
     <div class="boardTitleBackground">
@@ -50,6 +51,7 @@ export default {
         departureDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
         returnDate: '',
         oneWayOnly: true,
+        roundTrip: true,
     }
   },
   components: {
@@ -82,10 +84,11 @@ export default {
         passengers,
         roundTrip
       })
+
       await this.$router.push({ 
         name: 'FlightProductListPage',
       })
-        console.log(payload.departureAirport)
+
       await this.requestFlightProductsToFastAPI({
         originLocationCode,
         destinationLocationCode,
@@ -96,7 +99,7 @@ export default {
         children,
         infants
       })
-    }
+    },
   }
 }
 
