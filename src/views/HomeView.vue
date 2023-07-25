@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flightBackground"></div>
-    <div class="flightReserveDivider">
+    <div class="flightReserveDivider" id="flight-reserve-section">
       <div class="flightReserveForm">
         <FlightReserveForm @submit="searchFlights"
           :departureAirport="departureAirport"
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="boardListDivider">
-      <div class="boardListForm">
+      <div class="boardListForm" id="board-list-section">
         <MainBoardListForm/>
       </div>
     </div>
@@ -88,7 +88,7 @@ export default {
       await this.$router.push('/flight-product-list-page')
       const targetElement = document.getElementById('loading-section');
       if (targetElement) {
-        targetElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        targetElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
       }
       
 

@@ -14,13 +14,13 @@
         <v-btn elevation="0" class="nav-button" @click="toHome">
           <span>Home</span>
         </v-btn>
-        <v-btn elevation="0" class="nav-button">
+        <v-btn elevation="0" class="nav-button" @click="toReserve">
           <span>Flights</span>
         </v-btn>
         <v-btn elevation="0" class="nav-button">
           <span>Accomodation</span>
         </v-btn>
-        <v-btn elevation="0" style="margin-right:8rem; text-transform:none;">
+        <v-btn elevation="0" style="margin-right:8rem; text-transform:none;" @click="toBoardList">
           <span>Guide</span>
         </v-btn>
         <v-btn v-if="!userToken" elevation="0" class="account-button" @click="toLoginPage">
@@ -121,6 +121,34 @@ export default {
         this.$router.push({name: 'MyLikedPostsPage'})
       }
       else alert("로그인 해야 이용 할 수 있습니다")
+    },
+    async toReserve() {
+      if (this.$route.path !== '/') {
+      await this.$router.push('/');
+      const targetElement = document.getElementById('flight-reserve-section');
+      if (targetElement) {
+        targetElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+      } else {
+        const targetElement = document.getElementById('flight-reserve-section');
+        if (targetElement) {
+          targetElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
+      }    
+    },
+    async toBoardList() {
+      if (this.$route.path !== '/') {
+      await this.$router.push('/');
+      const targetElement = document.getElementById('board-list-section');
+      if (targetElement) {
+        targetElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+      } else {
+        const targetElement = document.getElementById('board-list-section');
+        if (targetElement) {
+          targetElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
+      }
     }
   }
 
