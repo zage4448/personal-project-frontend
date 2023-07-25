@@ -53,11 +53,10 @@
                 <v-card-title class="title_text">{{board.title}}</v-card-title>
               </div>
             </v-img>
-
-            
-
             <v-card-text>
-
+              <div v-if="board.category" class="text-subtitle-1" style="margin-top: -10px">
+                in {{ board.category }}
+              </div>
               <div class="my-2 text-subtitle-1">
                 {{ board.writer }}
               </div>
