@@ -30,40 +30,74 @@
       </v-data-table>
     </div>
     <div v-else>
-      <v-data-table
-        class="list-table"
-        :headers="boardHeaders"
-        :items="pagedItems"
-        :pagination.sync="pagination"
-        item-key="boardId"
-        item-value="boardId"
-        @click:row="readBoard">
-        <template v-slot:item.title="{ item }">
-          <div class="board_title_template" v-if="!item.content">
-            <div style="font-size: 18px">{{ item.title }}</div>
-          </div>
-          <div class="board_title_template" v-else>
-            <div style="font-size: 21px">{{ item.title }}</div>
-            <div class="small-text">
-              {{ item.content.substring(0, 10) + (item.content.length > 10 ? '....' : '') }}
-            </div>
-          </div>
-        </template>
-        <template v-slot:item.createDate="{ item }">
-          <div>
-            <div>{{ new Date(item.createDate).toLocaleDateString('en-US') }}</div>
-          </div>
-        </template>
-      </v-data-table>
+      <v-row>
+        <v-col v-for="board in boards" :key="board.boardId" cols="3">
+          <v-card
+            class="mx-auto my-12"
+            max-width="374"
+            @click=readBoard(board.boardId)
+          >
+            <template slot="progress">
+              <v-progress-linear
+                color="deep-purple"
+                height="10"
+                indeterminate
+              ></v-progress-linear>
+            </template>
 
-      <v-pagination
-        v-model="pagination.page"
-        :length="Math.ceil(boards.length / perPage)"/>
+            <v-img
+              height="250"
+              :src="getImage(board.thumbNailName)"
+            >
+              <div class="title_container">
+                <v-card-title class="title_text">{{board.title}}</v-card-title>
+              </div>
+            </v-img>
+
+            
+
+            <v-card-text>
+
+              <div class="my-2 text-subtitle-1">
+                {{ board.writer }}
+              </div>
+
+            </v-card-text>
+
+            <v-divider class="mx-4"></v-divider>
+
+            <div class="my-3 text-subtitle-2" style="padding-left: 16px;">
+                {{ board.content }}
+              </div>
+
+            <v-card-text>
+              <v-chip-group>
+                <v-chip>
+                  <v-icon class="chip_icon">mdi-eye</v-icon>
+                  {{ board.viewCount}} 
+                </v-chip>
+
+                <v-chip>
+                  <v-icon class="chip_icon">mdi-thumb-up-outline</v-icon> 
+                  {{ board.likeCount}}
+                </v-chip>
+
+                <v-chip>
+                  <v-icon class="chip_icon">mdi-message</v-icon>
+                  {{ board.commentCount}}
+                </v-chip>
+
+              </v-chip-group>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
     </div>
   </v-container>
 </template>
 
 <script>
+import env from '@/env'
 import { mapActions, mapState } from 'vuex'
 
 const boardModule = 'boardModule'
@@ -87,14 +121,6 @@ export default {
           width: '100px',
         }
       ], 
-      // categories: [
-      //   {continent: 'Asia', posts: 56}, 
-      //   {continent: 'Europe', posts: 41}, 
-      //   {continent: 'North America', posts: 25}, 
-      //   {continent: 'South America', posts: 14}, 
-      //   {continent: 'Africa', posts: 18}, 
-      //   {continent: 'Australia', posts: 14}
-      // ],
       boardHeaders: [
         {
           align: 'center',
@@ -109,6 +135,9 @@ export default {
       pagination: {
           page: 1
       },
+      awsBucketName: env.api.MAIN_AWS_BUCKET_NAME,
+      awsBucketRegion: env.api.MAIN_AWS_BUCKET_REGION,
+      awsIdentityPoolId: env.api.MAIN_AWS_BUCKET_IDENTITY_POOL_ID,
     }
   },
   computed: {
@@ -134,21 +163,50 @@ export default {
       const selectedRowCategory = item.boardCategory
       await this.requestBoardListByCategoryToSpring(selectedRowCategory)
     },
-    readBoard(event, { item }) {
-      const boardId = item.boardId
+    // readBoard(event, { item }) {
+    //   const boardId = item.boardId
+      // this.$router.push({
+      //   name: 'BoardReadPage',
+      //   params: {boardId: boardId.toString()}
+      // })
+    // },
+    readBoard(boardId) {
       this.$router.push({
         name: 'BoardReadPage',
         params: {boardId: boardId.toString()}
       })
     },
-    registerBoard() {
+    async registerBoard() {
       if (localStorage.getItem("userToken") == null) {
         alert("로그인 후 이용할 수 있습니다")
       } else {
-        this.$router.push({name: 'BoardRegisterPage'})
+        await this.$router.push({ name: 'BoardRegisterPage'})
+        const targetElement = document.getElementById('register-section');
+        if (targetElement) {
+          targetElement.scrollIntoView({ block: 'end', behavior: 'smooth' });
+        }
       }
     },
+    awsS3Config () {
+      AWS.config.update({
+          region: this.awsBucketRegion,
+          credentials: new AWS.CognitoIdentityCredentials({
+              IdentityPoolId: this.awsIdentityPoolId
+          })
+      })
 
+      this.s3 = new AWS.S3({
+          apiVersion: '2006-03-01',
+          params: {
+              Bucket: this.awsBucketName
+          }
+      })
+    },
+    getImage(imageName) {
+      this.awsS3Config()
+
+      return `https://${this.awsBucketName}.s3.${this.awsBucketRegion}.amazonaws.com/${imageName}`
+    }
   }
     
 }
@@ -193,7 +251,23 @@ export default {
   font-family: Arial, Helvetica, sans-serif;
 }   
 
+.chip_icon{
+  margin-right: 5px;
+  font-size: 8px;
+}
 
+.title_container {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  background-color: rgba(0, 0, 0, 0);
+  color: white;
+}
+.title_text {
+  font-size: 28px;
+  -webkit-text-stroke: 0.3px black;
+  text-shadow: 2px 2px 4px black;
+}
 
 
 
