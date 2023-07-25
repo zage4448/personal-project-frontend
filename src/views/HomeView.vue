@@ -85,9 +85,12 @@ export default {
         roundTrip
       })
 
-      await this.$router.push({ 
-        name: 'FlightProductListPage',
-      })
+      await this.$router.push('/flight-product-list-page')
+      const targetElement = document.getElementById('loading-section');
+      if (targetElement) {
+        targetElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      }
+      
 
       await this.requestFlightProductsToFastAPI({
         originLocationCode,
