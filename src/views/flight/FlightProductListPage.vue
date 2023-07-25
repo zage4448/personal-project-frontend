@@ -41,7 +41,7 @@ export default {
     FlightProductListLoadingForm
   },
   methods: {
-    ...mapActions(flightModule, ['requestFlightProductsToFastAPI', 'clearFlightProducts']),
+    ...mapActions(flightModule, ['requestFlightProductsToFastAPI', 'clearFlightProducts', 'saveFlightSearchElement']),
 
     async searchFlights(payload) {
       const originLocationCode = payload.departureAirport.code
@@ -52,7 +52,20 @@ export default {
       const adults = payload.passengers.adult
       const children = payload.passengers.child
       const infants = payload.passengers.infant
+      const departureAirport = payload.departureAirport
+      const arrivalAirport = payload.arrivalAirport
+      const passengers = payload.passengers
+      const roundTrip = payload.roundTrip
 
+      await this.saveFlightSearchElement({
+        departureAirport,
+        arrivalAirport,
+        departureDate,
+        returnDate,
+        nonStop,
+        passengers,
+        roundTrip
+      })
       this.clearFlightProducts()
 
       await this.requestFlightProductsToFastAPI({
