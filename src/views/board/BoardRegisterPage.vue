@@ -32,7 +32,7 @@ export default {
 
     async register(payload) {
       const boardId = await this.requestRegisterBoardToSpring(payload)
-      await new Promise((resolve) => setTimeout(resolve, 250));
+      await new Promise((resolve) => setTimeout(resolve, 300));
       await this.$router.push({
         name: 'BoardReadPage',
         params: { boardId: boardId.toString() }
