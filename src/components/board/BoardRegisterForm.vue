@@ -100,7 +100,10 @@
 
 <script>
 import AWS from 'aws-sdk'
-import env from '@/env'
+import env from '../../env'
+// import { mapActions } from 'vuex'
+
+// const boardModule = 'boardModule'
 
 export default {
   data () {
@@ -141,7 +144,8 @@ export default {
     }
   },
   methods: {
-    register() {
+    // ...mapActions(boardModule, ['requestRegisterBoardToSpring']),
+    async register() {
       if (!this.title) {
         alert("제목을 작성하세요")
       }
@@ -155,20 +159,25 @@ export default {
         alert("메인 사진을 등록해 주세요")
       }
       else {
+        await this.uploadAwsS3()
         const { userToken, title, content, category, thumbNailName, imageNameList } = this
         const convertedContent = content.replace(/\n/g, '<br>');
+
         this.$emit('submit', { userToken, title, content: convertedContent, category, thumbNailName, imageNameList })
+        // const boardId = await this.requestRegisterBoardToSpring({ userToken, title, content, category, thumbNailName, imageNameList })
+        // await this.$router.push({
+        //   name: 'BoardReadPage',
+        //   params: { boardId: boardId.toString() }
+        // })
       }
     },
     closeCategory() {
       this.reveal = false
-      console.log(this.category)
     },
     handleMainFileUpload() {
       const inputElement = this.$refs.mainFile.$el.querySelector('input[type="file"]');
       if (inputElement.files && inputElement.files.length > 0) {
         this.file = inputElement.files[0];
-        console.log("main Image upload: " + this.file.name);
 
         const reader = new FileReader();
         reader.onload = (event) => {
@@ -229,36 +238,33 @@ export default {
       })
     },
     uploadAwsS3 () {    
-        this.awsS3Config()
-        this.thumbNailName = this.createUniqueName() + this.file.name
-
-        this.s3.upload({
-            Key: this.thumbNailName,
-            Body: this.file,
-            ACL: 'public-read',
-        }, (err, data) => {
-            if (err) {
-                console.log(err)
-                return alert("메인 이미지 업로드 중 문제 발생", err.message)
-            }
-            console.log('메인 이미지 업로드 성공!')
-        })
-        
-        this.selectedFiles.forEach((file) => {
-            const imageName = this.createUniqueName() + file.name
-            this.imageNameList.push(imageName)
-            this.s3.upload({
-                Key: imageName,
-                Body: file,
-                ACL: 'public-read',
-            }, (err, data) => {
-                if (err) {
-                    console.log(err);
-                    return alert("상세 이미지 업로드 중 문제 발생", err.message)
-                }
-                console.log(`파일 ${file.name} 업로드 성공!`)
-            });
-        });
+      this.awsS3Config()
+      this.thumbNailName = this.createUniqueName() + this.file.name
+      this.s3.upload({
+          Key: this.thumbNailName,
+          Body: this.file,
+          ACL: 'public-read',
+      }, (err, data) => {
+          if (err) {
+              console.log(err)
+              return alert("메인 이미지 업로드 중 문제 발생", err.message)
+          }
+      })
+      
+      this.selectedFiles.forEach((file) => {
+          const imageName = this.createUniqueName() + file.name
+          this.imageNameList.push(imageName)
+          this.s3.upload({
+              Key: imageName,
+              Body: file,
+              ACL: 'public-read',
+          }, (err, data) => {
+              if (err) {
+                  console.log(err);
+                  return alert("상세 이미지 업로드 중 문제 발생", err.message)
+              }
+          });
+      });
     },
     createUniqueName() {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
