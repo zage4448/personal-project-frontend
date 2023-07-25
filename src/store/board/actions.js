@@ -33,9 +33,9 @@ export default {
       })
   },
   requestRegisterBoardToSpring({}, payload) {
-    const { userToken, title, content, category } = payload
+    const { userToken, title, content, category, thumbNailName, imageNameList } = payload
     console.log(category)
-    return axiosInst.springAxiosInst.post('board/register', { userToken, title, content, category })
+    return axiosInst.springAxiosInst.post('board/register', { userToken, title, content, category, thumbNailName, imageNameList })
     .then((res) => {
       alert('게시글 등록 성공')
       return res.data
