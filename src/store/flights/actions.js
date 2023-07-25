@@ -1,6 +1,7 @@
 import {
     REQUEST_FLIGHT_PRODUCT_LIST_TO_FAST_API,
-    SAVE_FLIGHT_SEARCH_ELEMENT
+    SAVE_FLIGHT_SEARCH_ELEMENT,
+    CLEAR_FLIGHT_PRODUCTS
 } from './mutation-types'
 
 import axiosInst from '@/utility/axiosInst'
@@ -20,5 +21,8 @@ export default {
   },
   saveFlightSearchElement({ commit }, payload) {
     return commit(SAVE_FLIGHT_SEARCH_ELEMENT, payload)
+  },
+  clearFlightProducts({ commit }) {
+    return commit(CLEAR_FLIGHT_PRODUCTS)
   }
 }

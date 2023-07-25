@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div v-if="!flightProducts || (Array.isArray(flightProducts) && flightProducts.length === 0)">
-      <FlightProductListLoadingForm ref="loadingForm"/>
+  <div id="target-section">
+    <div v-if="!flightProducts || (Array.isArray(flightProducts) && flightProducts.length === 0)" id="loading-section">
+      <FlightProductListLoadingForm/>
     </div>
     <div v-else>
       <div class="flight_list_background"></div>
@@ -41,7 +41,7 @@ export default {
     FlightProductListLoadingForm
   },
   methods: {
-    ...mapActions(flightModule, ['requestFlightProductsToFastAPI']),
+    ...mapActions(flightModule, ['requestFlightProductsToFastAPI', 'clearFlightProducts']),
 
     async searchFlights(payload) {
       const originLocationCode = payload.departureAirport.code
@@ -52,6 +52,8 @@ export default {
       const adults = payload.passengers.adult
       const children = payload.passengers.child
       const infants = payload.passengers.infant
+
+      this.clearFlightProducts()
 
       await this.requestFlightProductsToFastAPI({
         originLocationCode,
