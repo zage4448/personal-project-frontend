@@ -87,8 +87,8 @@ export default {
       })
   },
   requestModifyBoardToSpring({}, payload) {
-    const { boardId, title, content } = payload
-    return axiosInst.springAxiosInst.put(`board/${boardId}/modify-board`, { title, content })
+    const { boardId, title, content, newThumbNailName, newImageNameList } = payload
+    return axiosInst.springAxiosInst.put(`board/${boardId}/modify-board`, { title, content, newThumbNailName, newImageNameList })
     .then((res) => {})
   },
   requestDeleteBoardToSpring({}, boardId) {
@@ -99,6 +99,12 @@ export default {
     return axiosInst.springAxiosInst.get(`board/${userToken}/my-liked-boards`)
       .then((res) => {
         commit(REQUEST_BOARD_LIST_TO_SPRING, res.data)
+      })
+  },
+  requestBoardForModifyToSpring({ commit }, boardId ) {
+    return axiosInst.springAxiosInst.get(`board/${boardId}/for-modify`)
+      .then((res) => {
+        commit(REQUEST_BOARD_TO_SPRING, res.data)
       })
   },
 }
