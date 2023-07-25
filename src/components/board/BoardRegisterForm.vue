@@ -71,8 +71,7 @@
         <v-col v-for="(previewURL, index) in additionalFilePreviews" :key="index" cols="3">
           <v-img :src="previewURL" v-if="previewURL" style="max-width: 100%; max-height: 100%;">
             <v-icon
-              class="file-input__action-icon"
-              style="color= white;"
+              class="file-input__action-icon remove_icon"
               @click="removeFile(index)"
             >
               mdi-close
