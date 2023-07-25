@@ -10,7 +10,7 @@
       </div>    
     </div>
     <div class="register_form_divider">
-      <div class="register_form">
+      <div class="register_form" id="register-section">
         <BoardRegisterForm @submit="register"/> 
       </div>
     </div>
