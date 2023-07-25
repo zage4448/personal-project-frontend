@@ -19,6 +19,89 @@
       수정일자: {{ new Date(board.updateDate).toLocaleDateString('en-US') }}
       </div>
     </div>
+    <div>
+      <div style="text-align: center; margin-bottom: -25px">
+        <span><h2>게시글 표시 형식 보기: </h2></span>
+      </div>
+      <v-card
+            class="mx-auto my-12"
+            max-width="374"
+          >
+            <template slot="progress">
+              <v-progress-linear
+                color="deep-purple"
+                height="10"
+                indeterminate
+              ></v-progress-linear>
+            </template>
+
+            <v-img
+              height="250"
+              :src="getImage(board.thumbNailName)"
+            >
+              <div class="title_container">
+                <v-card-title class="title_text">{{board.title}}</v-card-title>
+              </div>
+            </v-img>
+            <v-card-text>
+              <div class="text-subtitle-1" style="margin-top: -10px">
+                in {{ board.boardCategory }}
+              </div>
+              <div class="my-2 text-subtitle-1">
+                {{ board.writer }}
+              </div>
+
+            </v-card-text>
+
+            <v-divider class="mx-4"></v-divider>
+
+            <div class="my-3 text-subtitle-2" style="padding-left: 16px;">
+                {{ board.content }}
+              </div>
+
+            <v-card-text>
+              <v-chip-group>
+                <v-chip>
+                  <v-icon class="chip_icon">mdi-eye</v-icon>
+                  {{ board.viewCount}} 
+                </v-chip>
+
+                <v-chip>
+                  <v-icon class="chip_icon">mdi-thumb-up-outline</v-icon> 
+                  {{ board.likeCount}}
+                </v-chip>
+
+                <v-chip>
+                  <v-icon class="chip_icon">mdi-message</v-icon>
+                  {{ board.commentCount}}
+                </v-chip>
+
+              </v-chip-group>
+            </v-card-text>
+          </v-card>
+    </div>
+    <v-row style="padding-left: 9px">
+      <v-col cols="6">
+        <v-card
+        >
+        <v-img :src="board.imageNameList ? getImage(board.imageNameList[0]) : ''"></v-img>
+        </v-card>
+      </v-col>
+      <v-col cols="3">
+        <v-card
+        >
+        <v-img :src="board.imageNameList ? getImage(board.imageNameList[1]) : ''" style="margin-bottom: 10px;"></v-img>
+        <v-img :src="board.imageNameList ? getImage(board.imageNameList[2]) : ''"></v-img>
+        </v-card>
+      </v-col>
+      <v-col cols="3">
+        <v-card
+        >
+        <v-img :src="board.imageNameList ? getImage(board.imageNameList[3]) : ''" style="margin-bottom: 10px;"></v-img>
+        <v-img :src="board.imageNameList ? getImage(board.imageNameList[4]) : ''"></v-img>
+        </v-card>
+      </v-col>
+    </v-row>
     <div v-if="!isEdit" class="board_content" v-html="board.content"></div>
     <div v-if="isEdit">
       <v-textarea style="padding: 20px;" 
@@ -92,6 +175,8 @@
 </template>
 
 <script>
+import env from '@/env'
+import AWS from 'aws-sdk'
 import { mapActions } from 'vuex';
 
 const boardModule = 'boardModule'
@@ -112,7 +197,12 @@ export default {
       content: '',
       title: '',
       password: '',
-      userToken: localStorage.getItem('userToken')
+      userToken: localStorage.getItem('userToken'),
+
+      s3: null,
+      awsBucketName: env.api.MAIN_AWS_BUCKET_NAME,
+      awsBucketRegion: env.api.MAIN_AWS_BUCKET_REGION,
+      awsIdentityPoolId: env.api.MAIN_AWS_BUCKET_IDENTITY_POOL_ID,
     }
   },
   props: {
@@ -172,6 +262,25 @@ export default {
         alert("게시글이 삭제 됐습니다")
         await this.$router.push({ name: 'MyPostsPage' })
       }
+    },
+    awsS3Config () {
+      AWS.config.update({
+          region: this.awsBucketRegion,
+          credentials: new AWS.CognitoIdentityCredentials({
+              IdentityPoolId: this.awsIdentityPoolId
+          })
+      })
+
+      this.s3 = new AWS.S3({
+          apiVersion: '2006-03-01',
+          params: {
+              Bucket: this.awsBucketName
+          }
+      })
+    },
+    getImage(imageName) {
+      this.awsS3Config()
+      return `https://${this.awsBucketName}.s3.${this.awsBucketRegion}.amazonaws.com/${imageName}`
     }
   },
 }
