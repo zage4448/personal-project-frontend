@@ -19,8 +19,29 @@
                     수정일자: {{ new Date(board.updateDate).toLocaleDateString('en-US') }}
                   </div>
                 </div>
-                <div class="board_content" v-html="board.content">
-                </div>
+                <v-row no-gutters>
+                  <v-col cols="6">
+                    <v-card
+                    >
+                    <v-img :src="board.imageNameList ? getImage(board.imageNameList[0]) : ''"></v-img>
+                    </v-card>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-card
+                    >
+                    <v-img :src="board.imageNameList ? getImage(board.imageNameList[1]) : ''"></v-img>
+                    <v-img :src="board.imageNameList ? getImage(board.imageNameList[2]) : ''"></v-img>
+                    </v-card>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-card
+                    >
+                    <v-img :src="board.imageNameList ? getImage(board.imageNameList[3]) : ''"></v-img>
+                    <v-img :src="board.imageNameList ? getImage(board.imageNameList[4]) : ''"></v-img>
+                    </v-card>
+                  </v-col>
+                </v-row>
+                <div class="board_content" v-html="board.content"></div>
                 <div class="board_like" v-if="!isBoardLiked" >
                   <button @click="likeBoard"><v-icon>mdi-thumb-up-outline</v-icon> Like</button>
                 </div>
@@ -94,6 +115,7 @@
     </div>
 </template>
 <script>
+import env from '@/env'
 import { mapActions } from 'vuex'
 
 const boardModule = 'boardModule'
@@ -114,7 +136,11 @@ export default {
           value: 'content',
           class: '*'
         },
-      ]
+      ],
+
+      awsBucketName: env.api.MAIN_AWS_BUCKET_NAME,
+      awsBucketRegion: env.api.MAIN_AWS_BUCKET_REGION,
+      awsIdentityPoolId: env.api.MAIN_AWS_BUCKET_IDENTITY_POOL_ID,
     }
   },
   props: {
@@ -187,6 +213,27 @@ export default {
         await this.requestReadBoardToSpring(boardId)
       }
     },
+    awsS3Config () {
+      AWS.config.update({
+          region: this.awsBucketRegion,
+          credentials: new AWS.CognitoIdentityCredentials({
+              IdentityPoolId: this.awsIdentityPoolId
+          })
+      })
+
+      this.s3 = new AWS.S3({
+          apiVersion: '2006-03-01',
+          params: {
+              Bucket: this.awsBucketName
+          }
+      })
+    },
+    getImage(imageName) {
+      this.awsS3Config()
+      console.log(this.board.thumbNailName)
+      console.log(imageName)
+      return `https://${this.awsBucketName}.s3.${this.awsBucketRegion}.amazonaws.com/${imageName}`
+    }
   },
 }
 </script>
@@ -296,6 +343,7 @@ export default {
   font-size: 14px;
   text-align: start;
   margin-bottom: 8px;
+  display: block;
 }
 .board_divider{
   margin-left: 18px;
