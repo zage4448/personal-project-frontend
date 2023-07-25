@@ -230,8 +230,6 @@ export default {
     },
     getImage(imageName) {
       this.awsS3Config()
-      console.log(this.board.thumbNailName)
-      console.log(imageName)
       return `https://${this.awsBucketName}.s3.${this.awsBucketRegion}.amazonaws.com/${imageName}`
     }
   },
