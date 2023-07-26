@@ -157,6 +157,7 @@ export default {
         { label: "New Posts", isDisabled: false, textColor: "white"}
       ],
       searchWord: '',
+      recentMarker: false,
     }
   },
   computed: {
@@ -193,6 +194,7 @@ export default {
       await this.requestBoardListByCategoryToSpring({category, currentPage, pageSize})
       this.currentCategory = category
       this.clearSearch()
+      this.recentMarker = false
     },
     async getPaginatedBoards() {
       if (this.currentCategory) {
@@ -206,6 +208,11 @@ export default {
         const currentPage = this.currentPage - 1
         const pageSize = this.pageSize
         await this.requestSearchBoardsToSpring({searchKeyword, currentPage, pageSize})
+      }
+      if(this.recentMarker) {
+        const currentPage = this.currentPage - 1
+        const pageSize = this.pageSize
+        await this.requestRecentBoardsToSpring({ currentPage, pageSize })
       }
     },
 
@@ -271,8 +278,13 @@ export default {
           { label: "Interests", isDisabled: false, textColor: "white"},
           { label: "New Posts", isDisabled: true, textColor: "#CCCCCC"}
         ],
-        this.requestRecentBoardsToSpring()
+        this.recentMarker = true
+        this.currentPage = 1
+        const currentPage = this.currentPage - 1
+        const pageSize = this.pageSize
+        this.requestRecentBoardsToSpring({ currentPage, pageSize })
         this.clearSearch() 
+        this.clearCurrentCategory()
       }
     },
     isThereBoards () {
@@ -293,7 +305,8 @@ export default {
     search() {
       if (this.searchWord.length >= 2 ) {
         this.currentPage = 1
-        this.currentCategory = ''
+        this.clearCurrentCategory()
+        this.recentMarker = false
         const searchKeyword = this.searchWord
         const currentPage = this.currentPage - 1
         const pageSize = this.pageSize
@@ -304,6 +317,9 @@ export default {
     },
     clearSearch() {
       this.searchWord = ''
+    },
+    clearCurrentCategory(){
+      this.currentCategory = ''
     }
   },
   watch: {

@@ -56,10 +56,12 @@ export default {
         commit(REQUEST_RELATED_BOARD_LIST_TO_SPRING, res.data)
       })
   },
-  requestRecentBoardsToSpring({ commit }) {
-    return axiosInst.springAxiosInst.get('board/list/recent')
+  requestRecentBoardsToSpring({ commit }, { currentPage, pageSize }) {
+    return axiosInst.springAxiosInst.get('board/list/recent', {
+      params: { currentPage: currentPage, pageSize: pageSize },
+    })
       .then((res) => {
-        commit(REQUEST_RECENT_BOARD_LIST_TO_SPRING, res.data)
+        commit(REQUEST_BOARD_LIST_TO_SPRING, res.data)
       })
   },
   requestIsBoardLikedToSpring({}, payload) {
