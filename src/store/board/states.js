@@ -3,4 +3,5 @@ export default {
     categories: [],
     board: {},
     relatedBoardList: [],
+    totalElements: 0
 }

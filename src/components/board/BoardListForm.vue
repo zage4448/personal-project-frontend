@@ -91,6 +91,7 @@
           </v-card>
         </v-col>
       </v-row>
+      <v-pagination v-model="currentPage" :length="totalPages" @input="getPaginatedBoards"></v-pagination>
     </div>
   </v-container>
 </template>
@@ -120,31 +121,22 @@ export default {
           width: '100px',
         }
       ], 
-      boardHeaders: [
-        {
-          align: 'center',
-          text: '제목',
-          value: 'title'
-        },
-        { align: 'left', value: 'category' },
-        { text: '작성자', align: 'end', value: 'writer', },
-        { text: '작성일자', align: 'end', value: 'createDate' }
-      ],
-      perPage: 5,
-      pagination: {
-          page: 1
-      },
+      pageSize: 8,
+      currentPage: 1,
+      currentCategory: '',
+
       awsBucketName: env.api.MAIN_AWS_BUCKET_NAME,
       awsBucketRegion: env.api.MAIN_AWS_BUCKET_REGION,
       awsIdentityPoolId: env.api.MAIN_AWS_BUCKET_IDENTITY_POOL_ID,
     }
   },
   computed: {
-    ...mapState(boardModule, ['categories', 'boards']),
-    pagedItems () {
-      const startIdx = (this.pagination.page - 1) * this.perPage
-      const endIdx = startIdx + this.perPage
-      return this.boards.slice(startIdx, endIdx)
+    ...mapState(boardModule, ['categories', 'boards', 'totalElements']),
+    totalBoards() {
+      return this.totalElements;
+    },
+    totalPages() {
+      return Math.ceil(this.totalBoards / this.pageSize);
     },
   },
   mounted() {
@@ -159,16 +151,23 @@ export default {
       return 'Tips on Traveling ' + boardCategory + 'n Countries'
     },
     async readCategory(event, { item }) {
-      const selectedRowCategory = item.boardCategory
-      await this.requestBoardListByCategoryToSpring(selectedRowCategory)
+      this.currentPage = 1
+      const category = item.boardCategory
+      const currentPage = this.currentPage - 1
+      const pageSize = this.pageSize
+      await this.requestBoardListByCategoryToSpring({category, currentPage, pageSize})
+      this.currentCategory = category
     },
-    // readBoard(event, { item }) {
-    //   const boardId = item.boardId
-      // this.$router.push({
-      //   name: 'BoardReadPage',
-      //   params: {boardId: boardId.toString()}
-      // })
-    // },
+    async getPaginatedBoards() {
+      const category = this.currentCategory
+      const currentPage = this.currentPage - 1
+      const pageSize = this.pageSize
+      await this.requestBoardListByCategoryToSpring({category, currentPage, pageSize})
+      console.log(currentPage)
+      console.log(pageSize)
+      console.log("리스트 페이지: " + this.boards)
+    },
+
     readBoard(boardId) {
       this.$router.push({
         name: 'BoardReadPage',

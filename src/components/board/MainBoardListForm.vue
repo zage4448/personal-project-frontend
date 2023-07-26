@@ -93,23 +93,6 @@ export default {
           }})
       }
     },
-//     isThereBoards() {
-//   const isSearchKeywordLong = this.searchKeyword.length > 1;
-  
-//   if (isSearchKeywordLong) {
-//     this.buttons.forEach(button => {
-//       button.isDisabled = false;
-//       button.textColor = "white";
-//     });
-//   } else {
-//     const placesButton = this.buttons.find(button => button.label === "Places");
-    
-//     if (placesButton) {
-//       placesButton.isDisabled = false;
-//       placesButton.textColor = "white";
-//     }
-//   }
-// },
     search() {
       if (this.searchKeyword.length >= 2 ) {
       this.requestSearchBoardsToSpring(this.searchKeyword)

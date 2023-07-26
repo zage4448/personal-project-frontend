@@ -10,7 +10,8 @@ import {
 
 export default {
   [REQUEST_BOARD_LIST_TO_SPRING] (state, receivedData) {
-    state.boards = receivedData
+    state.boards = receivedData.content
+    state.totalElements = receivedData.totalElements
   },
   [REQUEST_CATEGORY_LIST_TO_SPRING] (state, receivedData) {
     state.categories = receivedData

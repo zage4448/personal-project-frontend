@@ -17,10 +17,13 @@ export default {
         commit(REQUEST_CATEGORY_LIST_TO_SPRING, res.data)
       })
   },
-  requestBoardListByCategoryToSpring({ commit }, category) {
-    return axiosInst.springAxiosInst.get(`/board/list/${category}`)
+  requestBoardListByCategoryToSpring({ commit }, { category, currentPage, pageSize }) {
+    return axiosInst.springAxiosInst.get(`/board/list/${category}`, {
+      params: { currentPage: currentPage, pageSize: pageSize },
+    })
       .then((res) => {
-        commit(REQUEST_BOARD_LIST_TO_SPRING, res.data)
+        console.log(res.data.content)
+        commit(REQUEST_BOARD_LIST_TO_SPRING, res.data);
       })
   },
   clearBoards({ commit }) {
