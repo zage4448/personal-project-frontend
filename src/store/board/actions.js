@@ -22,7 +22,6 @@ export default {
       params: { currentPage: currentPage, pageSize: pageSize },
     })
       .then((res) => {
-        console.log(res.data.content)
         commit(REQUEST_BOARD_LIST_TO_SPRING, res.data);
       })
   },
@@ -43,10 +42,12 @@ export default {
       return res.data
     })
   },
-  requestSearchBoardsToSpring({ commit }, searchKeyword) {
-    return axiosInst.springAxiosInst.get(`board/list/search/${searchKeyword}`)
+  requestSearchBoardsToSpring({ commit }, { searchKeyword, currentPage, pageSize }) {
+    return axiosInst.springAxiosInst.get(`board/list/search/${searchKeyword}`, {
+      params: { currentPage: currentPage, pageSize: pageSize },
+    })
       .then((res) => {
-        commit(REQUEST_SEARCH_BOARD_TO_SPRING, res.data)
+        commit(REQUEST_BOARD_LIST_TO_SPRING, res.data)
       })
   },
   requestRelatedBoardListToSpring({ commit }, boardId) {

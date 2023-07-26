@@ -24,7 +24,7 @@
     </div>
     <div class="boardListDivider">
       <div class="boardListForm" id="board-list-section">
-        <MainBoardListForm/>
+        <BoardListForm/>
       </div>
     </div>
   </div>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import MainBoardListForm from '@/components/board/MainBoardListForm.vue'
+import BoardListForm from '@/components/board/BoardListForm.vue'
 import FlightReserveForm from '@/components/flight/FlightReserveForm.vue'
 import { mapActions } from 'vuex'
 
@@ -55,7 +55,7 @@ export default {
     }
   },
   components: {
-    MainBoardListForm,
+    BoardListForm,
     FlightReserveForm
   },
   methods: {

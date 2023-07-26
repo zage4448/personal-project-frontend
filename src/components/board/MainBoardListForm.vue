@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar flat color=black >
+    <!-- <v-app-bar flat color=black >
       <div class="toolbar_buttons">
         <button v-for="button in buttons" :key="button.label" class="board_button"
           :disabled="button.isDisabled" :style="{ color: button.textColor}" 
@@ -17,9 +17,10 @@
             <v-icon style="color: white; font-size:40px">mdi-magnify</v-icon>
           </button>
       </div>
-    </v-app-bar>
+    </v-app-bar> -->
     <div class="board-list-form">
       <BoardListForm @boardClick="isThereBoards"/>
+      <span>여기</span>
     </div>
   </div>
 </template>
