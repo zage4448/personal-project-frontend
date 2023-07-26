@@ -19,25 +19,25 @@
                     수정일자: {{ new Date(board.updateDate).toLocaleDateString('en-US') }}
                   </div>
                 </div>
-                <v-row style="padding-left: 9px">
+                <v-row style="padding-left: 9px" v-if="board.imageNameList">
                   <v-col cols="6">
                     <v-card
                     >
-                    <v-img :src="board.imageNameList ? getImage(board.imageNameList[0]) : ''"></v-img>
+                    <v-img :src="board.imageNameList[0] ? getImage(board.imageNameList[0]) : ''"></v-img>
                     </v-card>
                   </v-col>
                   <v-col cols="3">
                     <v-card
                     >
-                    <v-img :src="board.imageNameList ? getImage(board.imageNameList[1]) : ''" style="margin-bottom: 10px;"></v-img>
-                    <v-img :src="board.imageNameList ? getImage(board.imageNameList[2]) : ''"></v-img>
+                    <v-img :src="board.imageNameList[1] ? getImage(board.imageNameList[1]) : ''"></v-img>
+                    <v-img :src="board.imageNameList[2] ? getImage(board.imageNameList[2]) : ''"></v-img>
                     </v-card>
                   </v-col>
                   <v-col cols="3">
                     <v-card
                     >
-                    <v-img :src="board.imageNameList ? getImage(board.imageNameList[3]) : ''" style="margin-bottom: 10px;"></v-img>
-                    <v-img :src="board.imageNameList ? getImage(board.imageNameList[4]) : ''"></v-img>
+                    <v-img :src="board.imageNameList[3] ? getImage(board.imageNameList[3]) : ''"></v-img>
+                    <v-img :src="board.imageNameList[4] ? getImage(board.imageNameList[4]) : ''"></v-img>
                     </v-card>
                   </v-col>
                 </v-row>
