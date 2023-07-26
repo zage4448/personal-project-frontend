@@ -2,7 +2,9 @@
   <v-container>
     <v-form @submit.prevent="register">
     <v-card style="padding-bottom: 20px;">
-      <v-card-actions>
+      
+    <v-text-field style="padding: 30px;" label="제목" v-model="title"></v-text-field>
+    <v-card-actions>
         <v-btn
           text
           color="primary accent-4"
@@ -38,9 +40,8 @@
         </v-card-actions>
       </v-card>
     </transition>
-    <v-text-field style="padding: 30px;" label="제목" v-model="title"></v-text-field>
     <div style="padding: 20px">
-      <v-row style="height: 150px;">
+      <v-row>
         <v-col cols="4">
           <v-file-input
             label="썸네일"
@@ -51,8 +52,66 @@
             @change="handleMainFileUpload()">
           </v-file-input>
         </v-col>
-        <v-col cols="8">
-          <v-img :src="mainFilePreview" style="margin-left:200px; max-width: 150px; max-height: 150px;"></v-img>
+        <v-col>
+          <div style="text-align: center; margin-bottom: -25px">
+            <span><h2>게시글 표시 형식</h2></span>
+          </div>
+          <v-card
+            class="mx-auto my-12"
+            max-width="374"
+          >
+            <template slot="progress">
+              <v-progress-linear
+                color="deep-purple"
+                height="10"
+                indeterminate
+              ></v-progress-linear>
+            </template>
+
+            <v-img
+              height="250"
+              :src="mainFilePreview"
+            >
+              <div class="title_container">
+                <v-card-title class="title_text">{{title}}</v-card-title>
+              </div>
+            </v-img>
+            <v-card-text>
+              <div class="text-subtitle-1" style="margin-top: -10px">
+                in {{ category }}
+              </div>
+              <div class="my-2 text-subtitle-1">
+                {{ nickname }}
+              </div>
+
+            </v-card-text>
+
+            <v-divider class="mx-4"></v-divider>
+
+            <div class="my-3 text-subtitle-2" style="padding-left: 16px;">
+                {{ filteredContent }}
+              </div>
+
+            <v-card-text>
+              <v-chip-group>
+                <v-chip>
+                  <v-icon class="chip_icon">mdi-eye</v-icon>
+                  0
+                </v-chip>
+
+                <v-chip>
+                  <v-icon class="chip_icon">mdi-thumb-up-outline</v-icon> 
+                  0
+                </v-chip>
+
+                <v-chip>
+                  <v-icon class="chip_icon">mdi-message</v-icon>
+                  0
+                </v-chip>
+
+              </v-chip-group>
+            </v-card-text>
+          </v-card>
         </v-col>
       </v-row>
       <v-row>
@@ -108,6 +167,7 @@ export default {
   data () {
     return{
       userToken: localStorage.getItem('userToken'),
+      nickname: localStorage.getItem('nickname'),
       reveal: false,
       category: '',
       categories: [
@@ -275,6 +335,11 @@ export default {
         return randomUUID
     },
   },
+  computed: {
+    filteredContent() {
+      return this.content.slice(0, 10) + "..."
+    }
+  }
 }
     
 

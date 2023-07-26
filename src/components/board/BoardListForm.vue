@@ -182,8 +182,9 @@ export default {
         await this.$router.push({ name: 'BoardRegisterPage'})
         const targetElement = document.getElementById('register-section');
         if (targetElement) {
-          targetElement.scrollIntoView({ block: 'end', behavior: 'smooth' });
+          targetElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
         }
+        
       }
     },
     awsS3Config () {

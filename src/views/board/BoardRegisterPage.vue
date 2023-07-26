@@ -10,7 +10,8 @@
       </div>    
     </div>
     <div class="register_form_divider">
-      <div class="register_form" id="register-section">
+      <div id="register-section"></div>
+      <div class="register_form">
         <BoardRegisterForm @submit="register"/> 
       </div>
     </div>
@@ -38,7 +39,7 @@ export default {
         params: { boardId: boardId.toString() }
       })
     }
-  }
+  },
 }
 
 </script>
