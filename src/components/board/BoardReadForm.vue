@@ -19,28 +19,27 @@
                     수정일자: {{ new Date(board.updateDate).toLocaleDateString('en-US') }}
                   </div>
                 </div>
-                <v-row style="padding-left: 9px" v-if="board.imageNameList">
-                  <v-col cols="6">
-                    <v-card
-                    >
-                    <v-img :src="board.imageNameList[0] ? getImage(board.imageNameList[0]) : ''"></v-img>
-                    </v-card>
-                  </v-col>
-                  <v-col cols="3">
-                    <v-card
-                    >
-                    <v-img :src="board.imageNameList[1] ? getImage(board.imageNameList[1]) : ''"></v-img>
-                    <v-img :src="board.imageNameList[2] ? getImage(board.imageNameList[2]) : ''"></v-img>
-                    </v-card>
-                  </v-col>
-                  <v-col cols="3">
-                    <v-card
-                    >
-                    <v-img :src="board.imageNameList[3] ? getImage(board.imageNameList[3]) : ''"></v-img>
-                    <v-img :src="board.imageNameList[4] ? getImage(board.imageNameList[4]) : ''"></v-img>
-                    </v-card>
-                  </v-col>
-                </v-row>
+                <v-carousel 
+                  v-if="board.imageNameList"
+                  cycle
+                  show-arrows-on-hover
+                  hide-delimiter-background
+                  align="center"
+                  justify="center">
+                  <v-carousel-item
+                    v-for="(imageName, index) in board.imageNameList"
+                    :key="index"
+                    reverse-transition="fade-transition"
+                    transition="fade-transition"
+                  >
+                    <v-img 
+                      :src="getImage(imageName)"
+                      contain
+                      max-height="500"
+                      max-width="800"
+                    ></v-img>
+                  </v-carousel-item>
+                </v-carousel>
                 <div class="board_content" v-html="board.content"></div>
                 <div class="board_like" v-if="!isBoardLiked" >
                   <button @click="likeBoard"><v-icon>mdi-thumb-up-outline</v-icon> Like</button>
@@ -90,9 +89,6 @@
             </v-col>
               <v-col cols="2">
               <div class="board_right">
-                <div class="board_buttons">
-                  <button class="save_button">Save</button>
-                </div>
                 <div class="views_and_comments">
                   <v-icon>mdi-eye</v-icon>
                   {{ board.views }} views <br>
@@ -284,9 +280,6 @@ export default {
   background-color: white;
   padding-left: 18px;
   padding-top: 30px;
-}
-.board_buttons{
-  padding-top: 15px;
 }
 .views_and_comments{
   margin-top: 18px;
