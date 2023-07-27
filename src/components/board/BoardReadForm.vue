@@ -197,11 +197,16 @@ export default {
     },
     async addComment() {
       if (this.userToken) {
-        const { boardId, comment, userToken } = this
-        await this.requestAddCommentToSpring({ boardId, comment, userToken })
-        await this.requestCommentListToSpring(this.boardId)
-        await this.requestReadBoardToSpring(boardId)
-        this.comment = ''
+        if (this.comment.length > 1) {
+          const { boardId, comment, userToken } = this
+          await this.requestAddCommentToSpring({ boardId, comment, userToken })
+          await this.requestCommentListToSpring(this.boardId)
+          await this.requestReadBoardToSpring(boardId)
+          this.comment = ''
+        }
+        else {
+          alert ("댓글을 입력 해주세요")
+        }
       }
       else alert("로그인 후 이용 가능합니다")
     },
