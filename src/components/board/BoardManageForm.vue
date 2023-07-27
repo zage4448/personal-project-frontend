@@ -147,7 +147,7 @@
       align="center"
       justify="center">
       <v-carousel-item
-        v-for="(imageName, index) in board.imageNameList"
+        v-for="(imageName, index) in board.imageNameList.length > 0"
         :key="index"
         reverse-transition="fade-transition"
         transition="fade-transition"
