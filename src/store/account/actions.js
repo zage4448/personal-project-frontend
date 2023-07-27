@@ -115,5 +115,11 @@ export default {
       .then((res) => {
         localStorage.removeItem("userToken")
       })
+  },
+  requestEmailToSpring({}, userToken) {
+    return axiosInst.springAxiosInst.get(`account/${userToken}/get-email`)
+      .then((res) => {
+        return res.data
+      })
   }
 }

@@ -8,7 +8,7 @@
                 <v-divider style="margin-top: 8px;"></v-divider>
               </div>
               <v-btn block x-large rounded color="grey lighten-1" class="mt-6"
-                  :disabled="false" @click="getAuthenticationNumber">
+                  :disabled="false" @click="getEmailForAuthentication">
                 이메일 인증 요청하기
               </v-btn>
               <div class="d-flex" style="margin-top: 25px">
@@ -83,14 +83,19 @@ const accountModule = 'accountModule'
     methods: {
       ...mapActions(accountModule, ['requestCheckPasswordToSpring',
                                     'requestAuthentifyEmailToFastApi',
-                                    'requestSignoutToSpring']),
+                                    'requestSignoutToSpring',
+                                    'requestEmailToSpring']),
 
       async checkPassword() {
         const { userToken, password } = this
         this.isPasswordPass = await this.requestCheckPasswordToSpring({ userToken, password })
       },
-      async getAuthenticationNumber() {
-        this.authenticationCode = await this.requestAuthentifyEmailToFastApi(this.email)
+      async getEmailForAuthentication() {
+        const email = await this.requestEmailToSpring(this.userToken)
+        await this.getAuthenticationNumber(email)
+      },
+      async getAuthenticationNumber(email) {
+        this.authenticationCode = await this.requestAuthentifyEmailToFastApi({email})
         alert("인증번호가 전송 됐습니다")
       },
       checkAuthentication () {
