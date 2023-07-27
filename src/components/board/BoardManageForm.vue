@@ -140,14 +140,14 @@
       </v-col>
     </v-row>
     <v-carousel 
-      v-if="board.imageNameList && !isEdit"
+      v-if="board.imageNameList.length > 0 && !isEdit"
       cycle
       show-arrows-on-hover
       hide-delimiter-background
       align="center"
       justify="center">
       <v-carousel-item
-        v-for="(imageName, index) in board.imageNameList.length > 0"
+        v-for="(imageName, index) in board.imageNameList"
         :key="index"
         reverse-transition="fade-transition"
         transition="fade-transition"
