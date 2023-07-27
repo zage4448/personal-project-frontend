@@ -22,6 +22,7 @@ export default {
   data() {
     return {
       backgroundImage: '',
+      nickname: localStorage.getItem("nickname")
     }
   },
   components: {
@@ -44,6 +45,10 @@ methods: {
 async mounted() {
   await this.requestBoardForModifyToSpring(this.boardId)
   await this.requestCommentListToSpring(this.boardId)
+  if(this.board.writer != this.nickname) {
+    alert("해당 게시글의 작성자가 아닙니다")
+    this.$router.push({ name: 'home' })
+  }
   if (this.board.boardCategory == "Asia") {
     this.backgroundImage = require("@/assets/images/asia_banner.jpg")
   } else if (this.board.boardCategory == "Europe") {
