@@ -1,5 +1,5 @@
 <template>
-    <div class="SignoutPageDiv" :email="email">
+    <div class="SignoutPageDiv">
       <SignoutForm/>      
     </div>
   </template>
@@ -14,12 +14,6 @@
     data() {
       return {
         userToken: localStorage.getItem("userToken")
-      }
-    },
-    props: {
-      email: {
-        type: String,
-        required: true
       }
     },
     created() {

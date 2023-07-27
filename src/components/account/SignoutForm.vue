@@ -28,7 +28,7 @@
               <v-divider style="margin-top: 50px;"></v-divider>
               <div style="margin-top: 30px;">
                 <v-btn block x-large rounded color="grey lighten-1" class="mt-6"
-                  @click="signout" :disabled="!isAuthentified()">
+                  @click="showConfirmation = !showConfirmation" :disabled="!isAuthentified()">
                   회원 탈퇴
                 </v-btn>
               </div>
@@ -55,6 +55,24 @@
           </v-card>
         </v-col>
       </v-row>
+
+      <div v-if="showConfirmation" class="signout-popup-container">
+      <v-container class="signout-popup" fluid>
+        회원 탈퇴 시 모든 정보가 날아갑니다 <br>
+        게시글, 좋아요, 댓글 정보가 삭제 됩니다
+          <v-checkbox v-model="readyToSignOut">
+            <template v-slot:label>
+              <div>
+                회원 탈퇴 하시겠습니까?
+              </div>
+            </template>
+          </v-checkbox>
+        <div align="end">
+          <v-btn :disabled="!readyToSignOut" @click="signout">탈퇴</v-btn>
+          <v-btn @click="showConfirmation = !showConfirmation">취소</v-btn>
+        </div>
+      </v-container>
+    </div>
     </div>
   </template>
   
@@ -71,13 +89,9 @@ const accountModule = 'accountModule'
         password: '',
         authenticationNumber: '',
         authenticationCode: '305186400354083',
-        authentifyPass: true,
-      }
-    },
-    props: {
-      email: {
-        type: String,
-        required: true
+        authentifyPass: false,
+        showConfirmation: false,
+        readyToSignOut: false,
       }
     },
     methods: {
@@ -88,7 +102,11 @@ const accountModule = 'accountModule'
 
       async checkPassword() {
         const { userToken, password } = this
-        this.isPasswordPass = await this.requestCheckPasswordToSpring({ userToken, password })
+        if (await this.requestCheckPasswordToSpring({ userToken, password })) {
+          this.isPasswordPass = true
+        } else {
+        alert("비밀번호가 틀렸습니다")
+        }
       },
       async getEmailForAuthentication() {
         const email = await this.requestEmailToSpring(this.userToken)
@@ -110,14 +128,10 @@ const accountModule = 'accountModule'
         return this.authentifyPass
       },
       async signout() {
-        if (confirm("회원의 정보는 탈퇴 시 모두 없어집니다 \n 탈퇴 하시겠습니까?")){
-          if (confirm("작성한 게시글 댓글 정보가 모두 없어집니다 \n 정말로 탈퇴 하시겠습니까?")) {
-            await this.requestSignoutToSpring(this.userToken)
-            alert("탈퇴가 완료 됐습니다")
-            await this.$router.push({name: 'home'})
-            location.reload()
-          }
-        }
+        await this.requestSignoutToSpring(this.userToken)
+        alert("탈퇴가 완료 됐습니다")
+        await this.$router.push({name: 'home'})
+        location.reload()
       }
     }
   }
@@ -132,5 +146,30 @@ const accountModule = 'accountModule'
   .signout-card{
     background-color: rgba(255, 255, 255, 0.8) !important;
   }
+
+  .signout-popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signout-popup {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 350px;
+}
+
+.signout-popup button {
+  padding: 10px 15px;
+  margin: 5px;
+}
       
   </style>
