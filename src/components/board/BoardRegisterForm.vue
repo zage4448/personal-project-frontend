@@ -3,7 +3,7 @@
     <v-form @submit.prevent="register">
     <v-card style="padding-bottom: 20px;">
       
-    <v-text-field style="padding: 30px;" label="제목" v-model="title"></v-text-field>
+    <v-text-field style="padding: 30px;" label="제목" v-model="title" outlined></v-text-field>
     <v-card-actions>
         <v-btn
           text
@@ -58,29 +58,23 @@
           </div>
           <v-card
             class="mx-auto my-12"
-            max-width="374"
+            max-width="230"
+            max-height="300"
           >
-            <template slot="progress">
-              <v-progress-linear
-                color="deep-purple"
-                height="10"
-                indeterminate
-              ></v-progress-linear>
-            </template>
 
             <v-img
-              height="250"
+              height="120"
               :src="mainFilePreview"
             >
               <div class="title_container">
-                <v-card-title class="title_text">{{title}}</v-card-title>
+                <v-card-title class="preview_title_text">{{title}}</v-card-title>
               </div>
             </v-img>
             <v-card-text>
-              <div class="text-subtitle-1" style="margin-top: -10px">
+              <div class="text-subtitle-2" style="margin-top: -10px">
                 in {{ category }}
               </div>
-              <div class="my-2 text-subtitle-1">
+              <div class="my-2 text-subtitle-2">
                 {{ nickname }}
               </div>
 
@@ -88,29 +82,29 @@
 
             <v-divider class="mx-4"></v-divider>
 
-            <div class="my-3 text-subtitle-2" style="padding-left: 16px;">
+            <div class="my-3" style="padding-left: 16px; font-size: 8px;">
                 {{ filteredContent }}
               </div>
 
-            <v-card-text>
-              <v-chip-group>
-                <v-chip>
-                  <v-icon class="chip_icon">mdi-eye</v-icon>
-                  0
-                </v-chip>
+              <v-card-text>
 
-                <v-chip>
-                  <v-icon class="chip_icon">mdi-thumb-up-outline</v-icon> 
-                  0
-                </v-chip>
+                  <v-chip small>
+                    <v-icon class="preview_chip_icon">mdi-eye</v-icon>
+                    0
+                  </v-chip>
 
-                <v-chip>
-                  <v-icon class="chip_icon">mdi-message</v-icon>
-                  0
-                </v-chip>
+                  <v-chip small>
+                    <v-icon class="preview_chip_icon">mdi-thumb-up-outline</v-icon> 
+                    0
+                  </v-chip>
 
-              </v-chip-group>
-            </v-card-text>
+                  <v-chip small>
+                    <v-icon class="preview_chip_icon">mdi-message</v-icon>
+                    0
+                  </v-chip>
+
+
+              </v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -141,7 +135,8 @@
       </v-row>
     </div>
     <v-textarea style="padding: 30px;" 
-                label="본 글" 
+                outlined
+                label="본 문" 
                 v-model="content"
                 clearable
                 rows="6"
@@ -356,4 +351,14 @@ export default {
 .fade-leave-to {
   opacity: 0;
 }  
+
+.preview_title_text {
+  font-size: 14px;
+  -webkit-text-stroke: 0.15px black;
+  text-shadow: 1px 1px 2px black;
+}
+.preview_chip_icon {
+  margin-right: 3px;
+  font-size: 3px
+}
 </style>
