@@ -43,7 +43,7 @@
         </v-list-item>
 
         <v-divider></v-divider>
-        <!-- router :to="link.route" -->
+
         <v-list nav dense>
           <v-list-item v-for="(link, index) in links" :key="link.index" @click="handleClick(index)" class="nav-drawer-items">
             <v-list-item-action>
@@ -66,6 +66,7 @@
 import { mapActions } from 'vuex';
 
 const accountModule = 'accountModule'
+const boardModule = 'boardModule'
 
 
 export default {
@@ -82,6 +83,7 @@ export default {
   },
   methods: {
     ...mapActions(accountModule, ['requestLogoutToSpring']),
+    ...mapActions(boardModule, ['clearBoards']),
     toLoginPage() {
       this.$router.push({name: 'LoginPage'})
     },
@@ -124,13 +126,14 @@ export default {
     },
     async toReserve() {
       if (this.$route.path !== '/') {
-      await this.$router.push('/');
-      const targetElement = document.getElementById('flight-reserve-section');
-      if (targetElement) {
-        targetElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        this.clearBoards()
+        await this.$router.push('/');
+        const targetElement = document.getElementById('flight-reserve-section');
+        if (targetElement) {
+         targetElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
       }
       } else {
-        const targetElement = document.getElementById('flight-reserve-section');
+          const targetElement = document.getElementById('flight-reserve-section');
         if (targetElement) {
           targetElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
         }
@@ -138,13 +141,14 @@ export default {
     },
     async toBoardList() {
       if (this.$route.path !== '/') {
-      await this.$router.push('/');
-      const targetElement = document.getElementById('board-list-section');
+        this.clearBoards()
+        await this.$router.push('/');
+        const targetElement = document.getElementById('board-list-section');
       if (targetElement) {
         targetElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
       }
       } else {
-        const targetElement = document.getElementById('board-list-section');
+          const targetElement = document.getElementById('board-list-section');
         if (targetElement) {
           targetElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
         }
