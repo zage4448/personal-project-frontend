@@ -94,7 +94,7 @@ const accountModule = 'accountModule'
         } else alert("입력하신 닉네임이 기존 닉네임과 동일합니다")
       },
       async changeNickname() {
-        if (confirm("닉네음을 " + this.newNickname +" 로 변경하시겠습니까?")) {
+        if (confirm("닉네임을 " + this.newNickname +"(으)로 변경하시겠습니까?")) {
           const { userToken, newNickname } = this
           await this.requestChangeNicknameToSpring({ userToken, newNickname })
           alert("변경이 완료 됐습니다")
