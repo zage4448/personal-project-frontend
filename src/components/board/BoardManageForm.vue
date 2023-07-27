@@ -139,28 +139,27 @@
         </v-img>
       </v-col>
     </v-row>
-    <v-row style="padding-left: 9px" v-if="!isEdit">
-      <v-col cols="6">
-        <v-card
-        >
-        <v-img :src="board.imageNameList[0] ? getImage(board.imageNameList[0]) : ''"></v-img>
-        </v-card>
-      </v-col>
-      <v-col cols="3">
-        <v-card
-        >
-        <v-img :src="board.imageNameList[1] ? getImage(board.imageNameList[1]) : ''"></v-img>
-        <v-img :src="board.imageNameList[2] ? getImage(board.imageNameList[2]) : ''"></v-img>
-        </v-card>
-      </v-col>
-      <v-col cols="3">
-        <v-card
-        >
-        <v-img :src="board.imageNameList[3] ? getImage(board.imageNameList[3]) : ''"></v-img>
-        <v-img :src="board.imageNameList[4] ? getImage(board.imageNameList[4]) : ''"></v-img>
-        </v-card>
-      </v-col>
-    </v-row>
+    <v-carousel 
+      v-if="board.imageNameList && !isEdit"
+      cycle
+      show-arrows-on-hover
+      hide-delimiter-background
+      align="center"
+      justify="center">
+      <v-carousel-item
+        v-for="(imageName, index) in board.imageNameList"
+        :key="index"
+        reverse-transition="fade-transition"
+        transition="fade-transition"
+      >
+        <v-img 
+          :src="getImage(imageName)"
+          contain
+          max-height="500"
+          max-width="800"
+        ></v-img>
+      </v-carousel-item>
+    </v-carousel>
     <div v-if="!isEdit" class="board_content" v-html="board.content"></div>
     <div v-if="isEdit">
       <v-textarea style="padding: 20px;" 
