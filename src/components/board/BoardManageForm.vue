@@ -84,7 +84,7 @@
                 <v-chip-group>
                   <v-chip>
                     <v-icon class="chip_icon">mdi-eye</v-icon>
-                    {{ board.viewCount}} 
+                    {{ board.views}} 
                   </v-chip>
 
                   <v-chip>
