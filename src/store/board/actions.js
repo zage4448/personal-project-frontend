@@ -86,8 +86,13 @@ export default {
     return axiosInst.springAxiosInst.post('board/unLikeBoard', { boardId, userToken })
       .then((res) => {})
   },
-  requestMyPostListToSpring({ commit }, userToken) {
-    return axiosInst.springAxiosInst.get(`board/${userToken}/my-boards`)
+  requestMyPostListToSpring({ commit }, {userToken, pageSize, currentPage }) {
+    return axiosInst.springAxiosInst.get(`board/${userToken}/my-boards`, {
+      params: {
+        pageSize: pageSize,
+        currentPage: currentPage
+      }
+    })
       .then((res) => {
         commit(REQUEST_BOARD_LIST_TO_SPRING, res.data)
       })
@@ -104,7 +109,7 @@ export default {
   requestMyLikedPostListToSpring({ commit }, userToken) {
     return axiosInst.springAxiosInst.get(`board/${userToken}/my-liked-boards`)
       .then((res) => {
-        commit(REQUEST_BOARD_LIST_TO_SPRING, res.data)
+        commit(REQUEST_SEARCH_BOARD_TO_SPRING, res.data)
       })
   },
   requestBoardForModifyToSpring({ commit }, boardId ) {

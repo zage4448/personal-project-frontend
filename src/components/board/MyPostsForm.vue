@@ -5,8 +5,8 @@
       <v-data-table
         class="list-table"
         :headers="boardHeaders"
-        :items="pagedItems"
-        :pagination.sync="pagination"
+        hide-default-footer
+        :items="boards"
         item-key="boardId"
         item-value="boardId"
         @click:row="toManageBoard">
@@ -33,9 +33,7 @@
         </template>
       </v-data-table>
 
-      <v-pagination
-        v-model="pagination.page"
-        :length="Math.ceil(boards.length / perPage)"/>
+      <v-pagination v-model="currentPage" :length="totalPages" @input="getPaginatedBoards" style="margin-top: 40px;"></v-pagination>
     </div>
   </v-container>
 </template>
@@ -59,10 +57,8 @@ export default {
         { text: 'views', align: 'left', value: 'viewCount' },
         { text: '작성일자', align: 'end', value: 'createDate' }
       ],
-      perPage: 5,
-      pagination: {
-          page: 1
-      },
+      pageSize: 8,
+      currentPage: 1,
     }
   },
   methods: {
@@ -74,16 +70,22 @@ export default {
         params: {boardId: boardId.toString()}
       })
     },
+    async getPaginatedBoards() {
+      const { userToken, pageSize } = this
+      const currentPage = this.currentPage - 1
+      await this.requestMyPostListToSpring({ userToken, pageSize, currentPage })
+    }
   },
   async mounted() {
-    await this.requestMyPostListToSpring(this.userToken)
+    this.getPaginatedBoards()
   },
   computed: {
-    ...mapState(boardModule, ['boards']),
-    pagedItems () {
-      const startIdx = (this.pagination.page - 1) * this.perPage
-      const endIdx = startIdx + this.perPage
-      return this.boards.slice(startIdx, endIdx)
+    ...mapState(boardModule, ['boards', 'totalElements']),
+    totalBoards() {
+      return this.totalElements;
+    },
+    totalPages() {
+      return Math.ceil(this.totalBoards / this.pageSize);
     },
   }
 }
