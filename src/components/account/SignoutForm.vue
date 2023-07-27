@@ -58,8 +58,7 @@
 
       <div v-if="showConfirmation" class="signout-popup-container">
       <v-container class="signout-popup" fluid>
-        회원 탈퇴 시 모든 정보가 날아갑니다 <br>
-        게시글, 좋아요, 댓글 정보가 삭제 됩니다
+        회원 탈퇴 시 모든정보(게시글, 좋아요, 댓글 정보 등)가 삭제 됩니다
           <v-checkbox v-model="readyToSignOut">
             <template v-slot:label>
               <div>
