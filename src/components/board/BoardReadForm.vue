@@ -20,7 +20,7 @@
                   </div>
                 </div>
                 <v-carousel 
-                  v-if="board.imageNameList"
+                  v-if="board.imageNameList.length > 0"
                   cycle
                   show-arrows-on-hover
                   hide-delimiter-background
