@@ -95,7 +95,9 @@ export default {
   requestChangeNicknameToSpring({}, payload) {
     const { userToken, newNickname } = payload
     return axiosInst.springAxiosInst.put(`account/${userToken}/change-nickname`, {newNickname})
-      .then((res) => {})
+      .then((res) => {
+        localStorage.setItem("nickname", res.data)
+      })
   },
   requestChangePasswordToSpring({}, payload) {
     const { userToken, password, newPassword } = payload
