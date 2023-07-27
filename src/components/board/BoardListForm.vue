@@ -158,6 +158,7 @@ export default {
       ],
       searchWord: '',
       recentMarker: false,
+      interestMarker: false,
     }
   },
   computed: {
@@ -178,7 +179,8 @@ export default {
       'requestBoardListByCategoryToSpring', 
       'clearBoards', 
       'requestSearchBoardsToSpring', 
-      'requestRecentBoardsToSpring'
+      'requestRecentBoardsToSpring',
+      'requestMostLikedBoardsToSpring'
     ]),
     getDescription(boardCategory) {
       if (boardCategory === 'Europe') {
@@ -195,6 +197,7 @@ export default {
       this.currentCategory = category
       this.clearSearch()
       this.recentMarker = false
+      this.interestMarker = false
     },
     async getPaginatedBoards() {
       if (this.currentCategory) {
@@ -213,6 +216,11 @@ export default {
         const currentPage = this.currentPage - 1
         const pageSize = this.pageSize
         await this.requestRecentBoardsToSpring({ currentPage, pageSize })
+      }
+      if(this.interestMarker) {
+        const currentPage = this.currentPage - 1
+        const pageSize = this.pageSize
+        await this.requestMostLikedBoardsToSpring({ currentPage, pageSize })
       }
     },
 
@@ -270,7 +278,14 @@ export default {
           { label: "Interests", isDisabled: true, textColor: "#CCCCCC"},
           { label: "New Posts", isDisabled: false, textColor: "white"}
         ]
+        this.interestMarker = true
+        this.currentPage = 1
+        const currentPage = this.currentPage - 1
+        const pageSize = this.pageSize
+        this.requestMostLikedBoardsToSpring({ currentPage, pageSize })
         this.clearSearch() 
+        this.clearCurrentCategory()
+        this.recentMarker = false
       }
       if (label === "New Posts") {
         this.buttons = [
@@ -307,6 +322,7 @@ export default {
         this.currentPage = 1
         this.clearCurrentCategory()
         this.recentMarker = false
+        this.interestMarker = false
         const searchKeyword = this.searchWord
         const currentPage = this.currentPage - 1
         const pageSize = this.pageSize

@@ -64,6 +64,14 @@ export default {
         commit(REQUEST_BOARD_LIST_TO_SPRING, res.data)
       })
   },
+  requestMostLikedBoardsToSpring({ commit }, { currentPage, pageSize }) {
+    return axiosInst.springAxiosInst.get('board/list/most-liked', {
+      params: { currentPage: currentPage, pageSize: pageSize },
+    })
+      .then((res) => {
+        commit(REQUEST_BOARD_LIST_TO_SPRING, res.data)
+      })
+  },
   requestIsBoardLikedToSpring({}, payload) {
     const { boardId, userToken } = payload
     return axiosInst.springAxiosInst.get('board/checkBoardLiked', {
